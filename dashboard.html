@@ -67,7 +67,7 @@
     /* ── STATS ── */
     .stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
 
@@ -93,9 +93,10 @@
       margin-top: 4px;
     }
 
-    .stat.total .val { color: var(--accent); }
-    .stat.wifi  .val { color: var(--wifi); }
-    .stat.ble   .val { color: var(--ble); }
+    .stat.total   .val { color: var(--accent); }
+    .stat.wifi    .val { color: var(--wifi); }
+    .stat.ble     .val { color: var(--ble); }
+    .stat.packets .val { color: var(--rssi); }
 
     /* ── FEED ── */
     .feed {
@@ -170,6 +171,21 @@
 
     .meta span b { color: #888; }
 
+    .frames {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #1a1200;
+      color: var(--rssi);
+    }
+
+    .frames.hot {
+      background: #2a1800;
+      color: #ff6b00;
+      box-shadow: 0 0 6px rgba(255,107,0,0.3);
+    }
+
     /* ── EMPTY STATE ── */
     .empty {
       text-align: center;
@@ -209,6 +225,7 @@
     <div class="stat total"><div class="val" id="cnt-total">0</div><div class="lbl">Total</div></div>
     <div class="stat wifi"><div class="val" id="cnt-wifi">0</div><div class="lbl">WiFi</div></div>
     <div class="stat ble"><div class="val" id="cnt-ble">0</div><div class="lbl">BLE</div></div>
+    <div class="stat packets"><div class="val" id="cnt-pkts">0</div><div class="lbl">Pkts</div></div>
   </div>
 </header>
 
@@ -224,6 +241,7 @@
   const cntTotal   = document.getElementById("cnt-total");
   const cntWifi    = document.getElementById("cnt-wifi");
   const cntBle     = document.getElementById("cnt-ble");
+  const cntPkts    = document.getElementById("cnt-pkts");
   const lastUpdate = document.getElementById("last-update");
   const pulse      = document.getElementById("pulse");
 
@@ -231,6 +249,7 @@
     cntTotal.textContent = devices.length;
     cntWifi.textContent  = devices.filter(d => d.type === "wifi").length;
     cntBle.textContent   = devices.filter(d => d.type === "ble").length;
+    cntPkts.textContent  = devices.reduce((sum, d) => sum + (d.frame_count || 0), 0);
 
     if (devices.length === 0) {
       feed.innerHTML = `<div class="empty"><div class="icon">📡</div>Scanning... no finds yet.</div>`;
@@ -250,6 +269,12 @@
         ? `<span><b>ch</b> ${d.channel ?? "—"}</span><span><b>enc</b> ${d.encryption ?? "—"}</span>`
         : `<span><b>uuid</b> ${d.uuids ? "yes" : "no"}</span>`;
 
+      const frames    = d.frame_count || 0;
+      const hot       = frames >= 10;
+      const framesBadge = frames > 0
+        ? `<span class="frames ${hot ? "hot" : ""}">${frames} pkts</span>`
+        : "";
+
       return `
         <div class="card ${type}">
           <div class="card-top">
@@ -260,6 +285,7 @@
           <div class="mac">${mac}</div>
           <div class="meta">
             ${extras}
+            ${framesBadge}
             <span>${time}</span>
           </div>
         </div>`;
