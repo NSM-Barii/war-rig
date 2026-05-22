@@ -153,7 +153,7 @@ class RF_Test():
 
                 frame_type = "BEACON" if ft == "0x0008" else "PROBE"
 
-                console.print(f"[bold purple]\\[{iface}][/bold purple]  [bold red]{rssi}[/bold red]  [dim]{frame_type}[/dim]  [bold white]{cls._mask_ssid(ssid)}[/bold white]  [dim]{cls._mask_mac(mac)}[/dim]  [bold purple]ch:{channel}[/bold purple]")
+                console.print(f"[bold green]\\[{iface}][/bold green]  [bold red]{rssi}[/bold red]  [dim]{frame_type}[/dim]  [bold white]{cls._mask_ssid(ssid)}[/bold white]  [bold yellow]{cls._mask_mac(mac)}[/bold yellow]  [dim]ch:{channel}[/dim]")
 
         except Exception as e: console.print(f"[bold purple]\\[{iface}][/bold purple]  [bold red][!] Scanner Error:[bold yellow] {e}")
         finally: process.kill()
