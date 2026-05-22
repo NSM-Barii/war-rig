@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>WarRig</title>
+  <style>
+    :root {
+      --bg:       #080808;
+      --surface:  #111111;
+      --border:   #1c1c1c;
+      --text:     #ececec;
+      --muted:    #555;
+      --wifi:     #3dff8f;
+      --wifi-bg:  #0a2419;
+      --ble:      #4eaaff;
+      --ble-bg:   #091a2e;
+      --rssi:     #ffaa33;
+      --accent:   #fff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px 20px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: var(--accent);
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: background 0.3s;
+    }
+    .pulse.live { background: var(--wifi); box-shadow: 0 0 8px var(--wifi); }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .stat .val {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat .lbl {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .stat.total .val { color: var(--accent); }
+    .stat.wifi  .val { color: var(--wifi); }
+    .stat.ble   .val { color: var(--ble); }
+
+    /* ── FEED ── */
+    .feed {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card.wifi { border-left: 3px solid var(--wifi); }
+    .card.ble  { border-left: 3px solid var(--ble); }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+
+    .badge.wifi { background: var(--wifi-bg); color: var(--wifi); }
+    .badge.ble  { background: var(--ble-bg);  color: var(--ble); }
+
+    .rssi {
+      font-size: 13px;
+      color: var(--rssi);
+      font-weight: 600;
+    }
+
+    .name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mac {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: monospace;
+      letter-spacing: 0.5px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .meta span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .meta span b { color: #888; }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 60px 20px;
+    }
+
+    .empty .icon { font-size: 36px; margin-bottom: 12px; }
+
+    /* ── BOTTOM BAR ── */
+    .bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0; right: 0;
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div class="logo">WARRIG</div>
+    <div class="pulse" id="pulse"></div>
+  </div>
+  <div class="stats">
+    <div class="stat total"><div class="val" id="cnt-total">0</div><div class="lbl">Total</div></div>
+    <div class="stat wifi"><div class="val" id="cnt-wifi">0</div><div class="lbl">WiFi</div></div>
+    <div class="stat ble"><div class="val" id="cnt-ble">0</div><div class="lbl">BLE</div></div>
+  </div>
+</header>
+
+<div class="feed" id="feed"></div>
+
+<div class="bottom">
+  <span id="last-update">Waiting...</span>
+  <span>10.10.10.1</span>
+</div>
+
+<script>
+  const feed       = document.getElementById("feed");
+  const cntTotal   = document.getElementById("cnt-total");
+  const cntWifi    = document.getElementById("cnt-wifi");
+  const cntBle     = document.getElementById("cnt-ble");
+  const lastUpdate = document.getElementById("last-update");
+  const pulse      = document.getElementById("pulse");
+
+  function render(devices) {
+    cntTotal.textContent = devices.length;
+    cntWifi.textContent  = devices.filter(d => d.type === "wifi").length;
+    cntBle.textContent   = devices.filter(d => d.type === "ble").length;
+
+    if (devices.length === 0) {
+      feed.innerHTML = `<div class="empty"><div class="icon">📡</div>Scanning... no finds yet.</div>`;
+      return;
+    }
+
+    const reversed = [...devices].reverse();
+
+    feed.innerHTML = reversed.map(d => {
+      const type = d.type === "ble" ? "ble" : "wifi";
+      const name = d.ssid || d.local_name || "<hidden>";
+      const rssi = d.rssi != null ? `${d.rssi} dBm` : "—";
+      const mac  = d.mac  ?? "—";
+      const time = d.time_stamp ?? "—";
+
+      const extras = type === "wifi"
+        ? `<span><b>ch</b> ${d.channel ?? "—"}</span><span><b>enc</b> ${d.encryption ?? "—"}</span>`
+        : `<span><b>uuid</b> ${d.uuids ? "yes" : "no"}</span>`;
+
+      return `
+        <div class="card ${type}">
+          <div class="card-top">
+            <span class="badge ${type}">${type.toUpperCase()}</span>
+            <span class="rssi">${rssi}</span>
+          </div>
+          <div class="name">${name}</div>
+          <div class="mac">${mac}</div>
+          <div class="meta">
+            ${extras}
+            <span>${time}</span>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  async function poll() {
+    try {
+      const res  = await fetch("/data");
+      const data = await res.json();
+      render(data);
+      const now = new Date();
+      lastUpdate.textContent = `Updated ${now.toLocaleTimeString()}`;
+      pulse.className = "pulse live";
+    } catch {
+      pulse.className = "pulse";
+      lastUpdate.textContent = "Connection lost";
+    }
+  }
+
+  poll();
+  setInterval(poll, 5000);
+</script>
+</body>
+</html>
