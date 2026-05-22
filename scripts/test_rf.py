@@ -114,6 +114,12 @@ class RF_Test():
             "-e", "wlan.fc.type_subtype",
         ]
 
+        c1 = "bold green"
+        c2 = "bold red"
+        c3 = "bold purple"
+        c4 = "bold yellow"
+        c5 = "bold cyan"
+
         seen  = {}
         count = 0
 
@@ -153,7 +159,7 @@ class RF_Test():
 
                 frame_type = "BEACON" if ft == "0x0008" else "PROBE"
 
-                console.print(f"[bold green]\\[{iface}][/bold green]  [bold red]{rssi}[/bold red]  [dim]{frame_type}[/dim]  [bold white]{cls._mask_ssid(ssid)}[/bold white]  [bold yellow]{cls._mask_mac(mac)}[/bold yellow]  [dim]ch:{channel}[/dim]")
+                console.print(f"[{c1}][[/{c1}][{c2}]{iface}[/{c2}][{c1}]][/{c1}]  [{c2}]{rssi}[/{c2}]  [{c5}]{frame_type}[/{c5}]  [{c3}]{cls._mask_ssid(ssid)}[/{c3}]  [{c4}]{cls._mask_mac(mac)}[/{c4}]  [dim]ch:{channel}[/dim]")
 
         except Exception as e: console.print(f"[bold purple]\\[{iface}][/bold purple]  [bold red][!] Scanner Error:[bold yellow] {e}")
         finally: process.kill()
