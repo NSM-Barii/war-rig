@@ -100,7 +100,7 @@ class RF_Test():
     def _scanner(cls, iface, duration=600):
         """Run tshark on iface for N seconds and print what we see"""
 
-        console.print(f"\n[bold yellow][*] Sniffing on [bold white]{iface}[/bold white] for {duration}s...[/bold yellow]")
+        console.print(f"\n[bold purple][{iface}][/bold purple]  [bold yellow][*] Sniffing for {duration}s...[/bold yellow]")
 
         cmd = [
             "tshark", "-i", iface, "-l",
@@ -153,9 +153,9 @@ class RF_Test():
 
                 frame_type = "BEACON" if ft == "0x0008" else "PROBE"
 
-                console.print(f"[bold purple][{iface}][/bold purple]  [bold yellow]{frame_type}[/bold yellow]  [bold white]{cls._mask_ssid(ssid)}[/bold white]  [bold cyan]{cls._mask_mac(mac)}[/bold cyan]  [bold magenta]{rssi} dBm[/bold magenta]  [dim]ch:[/dim][bold blue]{channel}[/bold blue]")
+                console.print(f"[bold purple][{iface}][/bold purple]  [bold red]{rssi}[/bold red]  [bold yellow]{frame_type}[/bold yellow]  [bold white]{cls._mask_ssid(ssid)}[/bold white]  [bold cyan]{cls._mask_mac(mac)}[/bold cyan]  [dim]ch:[/dim][bold blue]{channel}[/bold blue]")
 
-        except Exception as e: console.print(f"[bold red][!] Scanner Error:[bold yellow] {e}")
+        except Exception as e: console.print(f"[bold purple][{iface}][/bold purple]  [bold red][!] Scanner Error:[bold yellow] {e}")
         finally: process.kill()
 
         cls.results[iface] = count
