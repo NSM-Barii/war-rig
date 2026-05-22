@@ -11,34 +11,8 @@ from rich.panel import Panel
 import subprocess, time
 
 
-<<<<<<< HEAD
 # NSM IMPORTS
 from database import Variables, Utilities, Background_Threads
-=======
-# ── STEP 1: CHECK ADAPTERS ────────────────────────────────
-def get_adapters():
-    """Return dict of {iface: mode} for all wifi adapters"""
-
-    adapters = {}
-
-    try:
-        out = subprocess.check_output(["iw", "dev"], text=True)
-        iface = None
-
-        for line in out.splitlines():
-            line = line.strip()
-            if line.startswith("Interface"):
-                if "wlan0" not in line:
-                    iface = line.split()[1]
-            elif line.startswith("type") and iface:
-                adapters[iface] = line.split()[1]
-                iface = None
-
-    except Exception as e:
-        console.print(f"[bold red][!] iw dev failed: {e}")
-
-    return adapters
->>>>>>> refs/remotes/origin/main
 
 
 # CONSTANTS
