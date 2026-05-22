@@ -46,12 +46,12 @@ pip install -r ../requirements.txt
 
 **2. Copy dnsmasq config:**
 ```bash
-sudo cp dnsmasq.conf /etc/dnsmasq.d/warrig.conf
+sudo cp config/dnsmasq.conf /etc/dnsmasq.d/warrig.conf
 ```
 
 **3. Make start script executable:**
 ```bash
-chmod +x start.sh
+chmod +x scripts/start.sh
 ```
 
 **4. Disable conflicting system services:**
@@ -63,13 +63,13 @@ sudo systemctl disable hostapd
 
 **5. Install and enable warrig service:**
 ```bash
-sudo cp warrig.service /etc/systemd/system/
+sudo cp config/warrig.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable warrig
 sudo systemctl start warrig
 ```
 
-**6. Update paths in `start.sh` and `server.py` to match where flock-back lives on your Pi.**
+**6. Update paths in `scripts/start.sh` and `dashboard/server.py` to match where flock-back lives on your Pi.**
 
 ---
 
@@ -104,12 +104,17 @@ Phone connects to WarRig AP
 ## Files
 
 ```
-start.sh          — master boot script
-server.py         — HTTP dashboard server
-dashboard.html    — phone UI
-hostapd.conf      — AP config (SSID, password, channel)
-dnsmasq.conf      — DHCP config for connected phones
-warrig.service    — systemd unit for auto-start on boot
+scripts/
+  start.sh          — master boot script (AP → monitor mode → flock-back → dashboard)
+
+config/
+  hostapd.conf      — AP config (SSID, password, channel)
+  dnsmasq.conf      — DHCP config for connected phones
+  warrig.service    — systemd unit for auto-start on boot
+
+dashboard/
+  server.py         — HTTP dashboard server
+  dashboard.html    — phone UI
 ```
 
 ---

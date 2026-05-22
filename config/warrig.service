@@ -7,7 +7,7 @@ Conflicts=hostapd.service
 [Service]
 Type=simple
 User=root
-ExecStart=/home/pi/war-rig/start.sh
+ExecStart=/home/pi/war-rig/scripts/start.sh
 Restart=on-failure
 RestartSec=10
 StandardOutput=journal

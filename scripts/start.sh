@@ -3,9 +3,9 @@
 # ── CONFIG ────────────────────────────────────────────────
 AP_IFACE="wlan0"
 AP_IP="10.10.10.1/24"
-HOSTAPD_CONF="$(dirname "$0")/hostapd.conf"
+HOSTAPD_CONF="$(dirname "$0")/../config/hostapd.conf"
 FLOCK_DIR="/home/pi/flock-back/src"
-SERVER_SCRIPT="$(dirname "$0")/server.py"
+SERVER_SCRIPT="$(dirname "$0")/../dashboard/server.py"
 # ──────────────────────────────────────────────────────────
 
 echo "[+] Unblocking RF..."
