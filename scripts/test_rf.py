@@ -24,7 +24,8 @@ def get_adapters():
         for line in out.splitlines():
             line = line.strip()
             if line.startswith("Interface"):
-                iface = line.split()[1]
+                if "wlan0" not in line:
+                    iface = line.split()[1]
             elif line.startswith("type") and iface:
                 adapters[iface] = line.split()[1]
                 iface = None
