@@ -1,11 +1,14 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
-import json, os
+from pathlib import Path
+import json
 
 # ── CONFIG ────────────────────────────────────────────────
 PORT         = 5000
-FLOCKS_JSON  = "/home/pi/flock-back/src/database/flocks.json"
-PACKETS_JSON = "/home/pi/flock-back/src/database/packets.json"
-DASHBOARD    = os.path.join(os.path.dirname(__file__), "dashboard.html")
+BASE         = Path(__file__).parent
+FLOCK_DB     = Path("/home/pi/flock-back") / "database"
+FLOCKS_JSON  = FLOCK_DB / "flocks.json"
+PACKETS_JSON = FLOCK_DB / "packets.json"
+DASHBOARD    = BASE / "dashboard.html"
 # ──────────────────────────────────────────────────────────
 
 
