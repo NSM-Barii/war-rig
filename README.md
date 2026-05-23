@@ -1,121 +1,48 @@
 # WarRig
 
-Portable wardriving rig built on a Raspberry Pi 5. Boots headless, spins up a local AP, puts all WiFi adapters into monitor mode, runs flock-back, and serves a live dashboard you access from your phone.
+> ⚠️ Currently in active development and testing. Features are being built and pushed regularly.
+
+![WarRig](assets/IMG_1346.png)
+
+Portable wardriving rig built inside a hardened case. Raspberry Pi 5 running Kali Linux, multiple WiFi adapters, boots headless and runs fully automated.
 
 ---
 
-## Dependencies
+## What's Coming
 
-**hostapd (Access Point):**
-```bash
-sudo apt install hostapd -y
-sudo systemctl unmask hostapd
-```
-
-**dnsmasq (DHCP):**
-```bash
-sudo apt install dnsmasq -y
-```
-
-**BlueZ (Bluetooth):**
-```bash
-sudo apt install bluez bluez-tools bluez-firmware -y
-sudo systemctl enable bluetooth && sudo systemctl start bluetooth
-```
-
-**tshark (WiFi packet capture):**
-```bash
-sudo apt install tshark -y
-```
-> Select **Yes** when asked to allow non-superusers to capture packets, or run with `sudo`.
-
-**Python 3.10+** — already on Kali.
+- **Multi-adapter monitor mode** — all adapters scanning simultaneously across 2.4GHz and 5GHz
+- **Live dashboard** — connect your phone to the rig's hotspot and view findings in real time
+- **Channel hopping** — automated hopping across all major channels per adapter
+- **flock-back integration** — full WiFi and BLE wardriving powered by [flock-back](https://github.com/nsm-barii/flock-back)
+- **Auto-start on boot** — plug in and everything comes up on its own via systemd
+- **GPS logging** — location tagging for every find
+- **Session management** — clean separation of data between drives
+- **BLE scanning** — Bluetooth device detection alongside WiFi
 
 ---
 
-## Setup
+## Hardware
 
-**1. Clone flock-back and install dependencies:**
-```bash
-git clone https://github.com/nsm-barii/flock-back
-cd flock-back/src
-python3 -m venv venv
-source venv/bin/activate
-pip install -r ../requirements.txt
-```
-
-**2. Copy dnsmasq config:**
-```bash
-sudo cp config/dnsmasq.conf /etc/dnsmasq.d/warrig.conf
-```
-
-**3. Make start script executable:**
-```bash
-chmod +x scripts/start.sh
-```
-
-**4. Disable conflicting system services:**
-```bash
-sudo systemctl stop hostapd dnsmasq
-sudo systemctl disable hostapd
-```
-> dnsmasq stays enabled — warrig restarts it with our config. hostapd is launched directly by start.sh so the system service needs to be off.
-
-**5. Install and enable warrig service:**
-```bash
-sudo cp config/warrig.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable warrig
-sudo systemctl start warrig
-```
-
-**6. Update paths in `scripts/start.sh` and `dashboard/server.py` to match where flock-back lives on your Pi.**
+- Raspberry Pi 5 (8GB) -  will soon be headless debian
+- Kali Linux ARM64
+- 4 WiFi adapters
+- USB hub
+- Hardened carry case
+- Portable battery bank
 
 ---
 
-## Checking Logs
+## Status
 
-```bash
-# live logs
-sudo journalctl -u warrig -f
-
-# last boot
-sudo journalctl -u warrig -b
-```
+Currently in the **RF testing phase**. Adapters are being verified for monitor mode, channel hopping, and live packet capture across all interfaces.
 
 ---
 
-## Boot Flow
+## Follow Along
 
-```
-Power On
-  → AP up on wlan0 (SSID: WarRig)
-  → All other adapters → monitor mode (dynamic, however many you have)
-  → flock-back starts scanning
-  → Dashboard server starts on port 5000
+If you want to follow the build as updates get pushed —
 
-Phone connects to WarRig AP
-  → Open browser → 10.10.10.1:5000
-  → Live table of Flock finds, updates every 5s
-```
-
----
-
-## Files
-
-```
-scripts/
-  start.sh          — master boot script (AP → monitor mode → flock-back → dashboard)
-
-config/
-  hostapd.conf      — AP config (SSID, password, channel)
-  dnsmasq.conf      — DHCP config for connected phones
-  warrig.service    — systemd unit for auto-start on boot
-
-dashboard/
-  server.py         — HTTP dashboard server
-  dashboard.html    — phone UI
-```
+⭐ **Give the repo a star** to keep up with progress.
 
 ---
 
