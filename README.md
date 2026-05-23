@@ -2,7 +2,7 @@
 
 > ⚠️ Currently in active development and testing. Features are being built and pushed regularly.
 
-![WarRig](assets/IMG_1346.png)
+<img src="assets/IMG_1346.png" width="400"/>
 
 Portable wardriving rig built inside a hardened case. Raspberry Pi 5 running Kali Linux, multiple WiFi adapters, boots headless and runs fully automated.
 
