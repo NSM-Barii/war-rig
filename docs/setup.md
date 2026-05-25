@@ -32,7 +32,7 @@ war-rig/docs/install_drivers_awus036acs.txt (AWUS036ACS)
 ```bash
 cd /home/pi/flock-back/src
 python3 -m venv venv
-venv/bin/pip install -r requirements.txt
+venv/bin/pip install -r ../requirements.txt
 ```
 
 **5. Install and enable the service**
