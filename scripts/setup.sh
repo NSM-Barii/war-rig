@@ -57,8 +57,8 @@ echo ""
 echo "[+] Setting up flock-back Python environment..."
 
 if [ ! -d "$FLOCK_DIR" ]; then
-    echo "[!] flock-back not found at $FLOCK_DIR — clone it first"
-    exit 1
+    echo "[*] flock-back not found — cloning..."
+    git clone https://github.com/NSM-Barii/flock-back.git "$FLOCK_DIR"
 fi
 
 cd "$FLOCK_DIR/src"
