@@ -11,8 +11,15 @@ git clone <flock-back-repo>
 ```
 
 **2. Install system packages**
+
+Kali / Debian:
 ```bash
 sudo apt install -y tshark hostapd dnsmasq rfkill iw bluetooth bluez python3 python3-venv
+```
+
+Arch:
+```bash
+sudo pacman -S wireshark-cli hostapd dnsmasq iw bluez bluez-utils python
 ```
 
 **3. Install WiFi adapter drivers**
