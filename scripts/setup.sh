@@ -53,6 +53,15 @@ echo "[+] AWUS036ACS driver installed"
 echo ""
 
 
+# ── WAR-RIG VENV ──────────────────────────────────────────
+echo "[+] Setting up war-rig Python environment..."
+cd "$SCRIPT_DIR"
+python3 -m venv venv
+venv/bin/pip install -q -r "$SCRIPT_DIR/requirements.txt"
+echo "[+] war-rig venv ready"
+echo ""
+
+
 # ── FLOCK-BACK VENV ───────────────────────────────────────
 echo "[+] Setting up flock-back Python environment..."
 
@@ -70,7 +79,7 @@ echo ""
 
 # ── SYSTEMD SERVICE ───────────────────────────────────────
 echo "[+] Installing warrig service..."
-sed "s|ExecStart=.*|ExecStart=/usr/bin/python3 $SCRIPT_DIR/start.py|" \
+sed "s|ExecStart=.*|ExecStart=$SCRIPT_DIR/venv/bin/python $SCRIPT_DIR/start.py|" \
     "$BASE/config/warrig.service" > /etc/systemd/system/warrig.service
 systemctl daemon-reload
 systemctl enable warrig.service
