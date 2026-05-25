@@ -7,8 +7,8 @@ Conflicts=hostapd.service
 [Service]
 Type=simple
 User=root
-ExecStart=/home/pi/war-rig/scripts/start.sh
-Restart=on-failure
+ExecStart=/usr/bin/python3 /home/pi/war-rig/scripts/start.py
+Restart=always
 RestartSec=10
 StandardOutput=journal
 StandardError=journal
