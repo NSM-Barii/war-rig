@@ -1,0 +1,36 @@
+GitHub Repo: https://github.com/morrownr/8821au-20210708
+
+Version: 5.12.5.2
+Adapter: ALFA AWUS036ACS (RTL8811AU / RTL8821AU chipset)
+Supports: Monitor mode, ARM64, kernels 5.4 - 6.14
+
+
+# INSTALLATION FOR KALI-LINUX (Raspberry Pi 4B/5B)
+
+NOTE: Kernel 6.14+ has an in-kernel rtw88 driver that replaces this.
+Check your kernel first:
+
+   uname -r
+
+If on 6.14+, skip this and use: https://github.com/lwfinger/rtw88
+If below 6.14 (e.g. 6.12.x), use steps below.
+
+
+1. Install dependencies
+
+   sudo apt install -y kalipi-kernel-headers build-essential dkms git libelf-dev rfkill iw
+
+
+2. Clone and install
+
+   git clone https://github.com/morrownr/8821au-20210708.git
+   cd 8821au-20210708
+   sudo ./install-driver.sh
+
+
+3. To remove later
+
+   sudo sh remove-driver.sh
+
+
+4. May need to restart environment (system)

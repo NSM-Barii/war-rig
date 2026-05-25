@@ -1,0 +1,23 @@
+GitHub Repo: https://github.com/morrownr/8814au
+
+Version: 5.8.5.1
+Adapter: ALFA AWUS1900 (RTL8814AU chipset)
+Supports: Monitor mode, ARM64, kernels 5.4 - 6.18.x
+
+
+# INSTALLATION FOR KALI-LINUX (Raspberry Pi 4B/5B)
+
+
+1. Install dependencies
+
+   sudo apt install -y kalipi-kernel-headers build-essential dkms git libelf-dev rfkill iw
+
+
+2. Clone and install
+
+   git clone https://github.com/morrownr/8814au.git
+   cd 8814au
+   sudo ./install-driver.sh
+
+
+3. May need to restart environment (system)
