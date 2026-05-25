@@ -212,6 +212,21 @@
       font-size: 11px;
       color: var(--muted);
     }
+
+    /* ── SSH BUTTON ── */
+    .ssh-btn {
+      background: #0e1a0e;
+      color: #3dff8f;
+      border: 1px solid #3dff8f33;
+      border-radius: 8px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .ssh-btn:active { background: #1a3320; }
   </style>
 </head>
 <body>
@@ -233,6 +248,7 @@
 
 <div class="bottom">
   <span id="last-update">Waiting...</span>
+  <button class="ssh-btn" id="ssh-btn">SSH MODE</button>
   <span>10.10.10.1</span>
 </div>
 
@@ -305,6 +321,11 @@
       lastUpdate.textContent = "Connection lost";
     }
   }
+
+  document.getElementById("ssh-btn").addEventListener("click", async () => {
+    if (!confirm("Drop AP and switch to SSH mode?")) return;
+    await fetch("/ssh-mode");
+  });
 
   poll();
   setInterval(poll, 2000);

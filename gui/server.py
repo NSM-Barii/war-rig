@@ -1,71 +1,93 @@
+# THIS MODULE WILL BE RESPONSIBLE FOR LAUNCHING THE WARRIG DASHBOARD SERVER
+
+
+# UI IMPORTS
+from rich.console import Console; console = Console()
+
+
+# ETC IMPORTS
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
-import json
+import json, subprocess, threading
 
-# ── CONFIG ────────────────────────────────────────────────
+
+# CONSTANTS
 PORT         = 5000
 BASE         = Path(__file__).parent
-FLOCK_DB     = Path("/home/pi/flock-back") / "database"
+FLOCK_DB     = Path(__file__).parent.parent.parent / "flock-back" / "database"
 FLOCKS_JSON  = FLOCK_DB / "flocks.json"
 PACKETS_JSON = FLOCK_DB / "packets.json"
 DASHBOARD    = BASE / "dashboard.html"
-# ──────────────────────────────────────────────────────────
+
+
 
 
 class Handler(BaseHTTPRequestHandler):
+    """This class will be responsible for handling all HTTP requests"""
+
 
     def do_GET(self):
-        if self.path == "/":
-            self._serve_html()
-        elif self.path == "/data":
-            self._serve_data()
+        """Route incoming GET requests"""
+
+
+        if   self.path == "/":         self._serve_html()
+        elif self.path == "/data":     self._serve_data()
+        elif self.path == "/ssh-mode": self._ssh_mode()
         else:
             self.send_response(404)
             self.end_headers()
 
+
     def _serve_html(self):
+        """This method will be responsible for serving the dashboard HTML"""
+
+
         try:
-            with open(DASHBOARD, "rb") as f:
-                content = f.read()
+            with open(DASHBOARD, "rb") as f: content = f.read()
+
             self.send_response(200)
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             self.wfile.write(content)
+
         except FileNotFoundError:
             self.send_response(404)
             self.end_headers()
 
+
     def _serve_data(self):
+        """This method will be responsible for serving device data as JSON"""
+
+
+        # PULL DEVICES
         devices = []
         try:
             with open(FLOCKS_JSON, "r") as f:
                 for line in f:
                     line = line.strip()
-                    if line:
-                        devices.append(json.loads(line))
-        except FileNotFoundError:
-            pass
+                    if line: devices.append(json.loads(line))
+        except FileNotFoundError: pass
 
-        # build a map of mac -> max frame_count from packets.json
+
+        # BUILD PACKET COUNT MAP
         packet_counts = {}
         try:
             with open(PACKETS_JSON, "r") as f:
                 for line in f:
                     line = line.strip()
-                    if not line:
-                        continue
+                    if not line: continue
                     entry = json.loads(line)
                     mac   = entry.get("mac")
                     count = entry.get("frame_count", 0)
                     if mac and count > packet_counts.get(mac, 0):
                         packet_counts[mac] = count
-        except FileNotFoundError:
-            pass
+        except FileNotFoundError: pass
 
-        # enrich each device with its packet hit count
+
+        # ENRICH DEVICES WITH PACKET COUNT
         for device in devices:
-            mac = device.get("mac")
-            device["frame_count"] = packet_counts.get(mac, 0)
+            device["frame_count"] = packet_counts.get(device.get("mac"), 0)
+
 
         payload = json.dumps(devices).encode()
         self.send_response(200)
@@ -74,11 +96,43 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(payload)
 
-    def log_message(self, format, *args):
-        pass  # suppress per-request logs
+
+    def _ssh_mode(self):
+        """This method will be responsible for dropping the AP and handing control back to NetworkManager"""
+
+
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        self.wfile.write(b'{"status": "ok"}')
+
+        subprocess.Popen(["nmcli", "dev", "set", "wlan0", "managed", "yes"])
+        threading.Thread(target=self.server.shutdown, daemon=True).start()
+
+
+    def log_message(self, format, *args): pass
+
+
+
+
+class Dashboard_Server():
+    """This class will be responsible for controlling the dashboard web server"""
+
+
+    server = None
+
+
+    @staticmethod
+    def start():
+        """Start the HTTP server"""
+
+
+        Dashboard_Server.server = HTTPServer(("0.0.0.0", PORT), Handler)
+        console.print(f"[bold green][+] Dashboard:[bold yellow] http://10.10.10.1:{PORT}")
+        Dashboard_Server.server.serve_forever()
+
+
 
 
 if __name__ == "__main__":
-    server = HTTPServer(("0.0.0.0", PORT), Handler)
-    print(f"[+] Dashboard → http://10.10.10.1:{PORT}")
-    server.serve_forever()
+    Dashboard_Server.start()

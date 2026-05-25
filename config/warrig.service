@@ -9,7 +9,7 @@ Type=simple
 User=root
 ExecStart=/usr/bin/python3 /home/pi/war-rig/scripts/start.py
 Restart=always
-RestartSec=10
+RestartSec=60
 StandardOutput=journal
 StandardError=journal
 
