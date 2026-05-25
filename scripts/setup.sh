@@ -28,10 +28,6 @@ echo ""
 
 
 # ── DRIVERS ───────────────────────────────────────────────
-echo "[+] Installing driver dependencies..."
-apt install -y kalipi-kernel-headers build-essential dkms git libelf-dev
-echo ""
-
 echo "[+] Installing AWUS1900 driver (rtl8814au)..."
 rm -rf /tmp/8814au
 git clone https://github.com/morrownr/8814au.git /tmp/8814au
