@@ -8,7 +8,10 @@ from rich.console import Console; console = Console()
 # ETC IMPORTS
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
-import json, subprocess, threading
+import json, subprocess, threading, sys
+
+sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
+from kismet import Kismet_Client
 
 
 # CONSTANTS
@@ -32,6 +35,7 @@ class Handler(BaseHTTPRequestHandler):
 
         if   self.path == "/":         self._serve_html()
         elif self.path == "/data":     self._serve_data()
+        elif self.path == "/kismet":   self._serve_kismet()
         elif self.path == "/ssh-mode": self._ssh_mode()
         else:
             self.send_response(404)
@@ -106,8 +110,33 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b'{"status": "ok"}')
 
-        subprocess.Popen(["nmcli", "dev", "set", "wlan0", "managed", "yes"])
-        threading.Thread(target=self.server.shutdown, daemon=True).start()
+        def teardown():
+            subprocess.run(["pkill", "-x", "hostapd"],                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["rm", "-f", "/etc/dnsmasq.d/warrig.conf"],              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["systemctl", "restart", "dnsmasq"],                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["nmcli", "dev", "set", "wlan0", "managed", "yes"],      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            self.server.shutdown()
+
+        threading.Thread(target=teardown, daemon=True).start()
+
+
+    def _serve_kismet(self):
+        """This method will be responsible for proxying Kismet device data"""
+
+
+        devices, err = Kismet_Client.get_devices()
+
+        if err:
+            payload = json.dumps({"error": err}).encode()
+            self.send_response(503)
+        else:
+            payload = json.dumps(devices).encode()
+            self.send_response(200)
+
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(payload)
 
 
     def log_message(self, format, *args): pass
