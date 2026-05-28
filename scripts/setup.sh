@@ -22,7 +22,7 @@ echo ""
 # ── SYSTEM DEPS ───────────────────────────────────────────
 echo "[+] Installing system packages..."
 apt update -qq
-apt install -y tshark hostapd dnsmasq rfkill iw bluetooth bluez python3 python3-venv bc dkms build-essential
+apt install -y tshark hostapd dnsmasq rfkill iw bluetooth bluez kismet python3 python3-venv bc dkms build-essential
 echo "[+] System packages installed"
 echo ""
 

@@ -111,6 +111,7 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(b'{"status": "ok"}')
 
         def teardown():
+            import time; time.sleep(0.5)
             subprocess.run(["pkill", "-x", "hostapd"],                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["rm", "-f", "/etc/dnsmasq.d/warrig.conf"],              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["systemctl", "restart", "dnsmasq"],                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

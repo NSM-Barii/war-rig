@@ -58,13 +58,12 @@
     }
 
     .pulse {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: var(--muted);
       transition: background 0.3s;
     }
-    .pulse.live { background: var(--wifi); box-shadow: 0 0 8px var(--wifi); }
+    .pulse.live        { background: var(--wifi);   box-shadow: 0 0 8px var(--wifi); }
     .pulse.kismet-live { background: var(--kismet); box-shadow: 0 0 8px var(--kismet); }
 
     /* ── STATS ── */
@@ -103,10 +102,9 @@
     .stat.packets .val { color: var(--rssi); }
     .stat.kismet  .val { color: var(--kismet); }
 
-    /* ── TABS ── */
+    /* ── MAIN TABS ── */
     .tabs {
       display: flex;
-      gap: 0;
       border-top: 1px solid var(--border);
     }
 
@@ -131,6 +129,32 @@
     .panel { display: none; }
     .panel.active { display: block; }
 
+    /* ── KISMET SUB-TABS ── */
+    .subtabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: var(--header-h, 160px);
+      z-index: 9;
+    }
+
+    .subtab {
+      flex: 1;
+      padding: 9px 0;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .subtab.active { color: var(--kismet); border-color: var(--kismet); }
+
     /* ── FEED ── */
     .feed {
       padding: 14px 16px;
@@ -139,6 +163,7 @@
       gap: 10px;
     }
 
+    /* ── CARDS ── */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -171,11 +196,7 @@
     .badge.ble    { background: var(--ble-bg);    color: var(--ble); }
     .badge.kismet { background: var(--kismet-bg); color: var(--kismet); }
 
-    .rssi {
-      font-size: 13px;
-      color: var(--rssi);
-      font-weight: 600;
-    }
+    .rssi { font-size: 13px; color: var(--rssi); font-weight: 600; }
 
     .name {
       font-size: 16px;
@@ -193,17 +214,8 @@
       letter-spacing: 0.5px;
     }
 
-    .meta {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .meta span {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
+    .meta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .meta span { font-size: 11px; color: var(--muted); }
     .meta span b { color: #888; }
 
     .frames {
@@ -221,21 +233,19 @@
       box-shadow: 0 0 6px rgba(255,107,0,0.3);
     }
 
-    /* ── EMPTY STATE ── */
+    /* ── EMPTY ── */
     .empty {
       text-align: center;
       color: var(--muted);
       font-size: 14px;
       padding: 60px 20px;
     }
-
     .empty .icon { font-size: 36px; margin-bottom: 12px; }
 
     /* ── BOTTOM BAR ── */
     .bottom {
       position: fixed;
-      bottom: 0;
-      left: 0; right: 0;
+      bottom: 0; left: 0; right: 0;
       background: rgba(8,8,8,0.95);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -273,18 +283,18 @@
 
   <!-- FLOCK STATS -->
   <div class="stats" id="flock-stats">
-    <div class="stat total">  <div class="val" id="cnt-total">0</div> <div class="lbl">Total</div></div>
-    <div class="stat wifi">   <div class="val" id="cnt-wifi">0</div>  <div class="lbl">WiFi</div></div>
-    <div class="stat ble">    <div class="val" id="cnt-ble">0</div>   <div class="lbl">BLE</div></div>
-    <div class="stat packets"><div class="val" id="cnt-pkts">0</div>  <div class="lbl">Pkts</div></div>
+    <div class="stat total">  <div class="val" id="cnt-total">0</div><div class="lbl">Total</div></div>
+    <div class="stat wifi">   <div class="val" id="cnt-wifi">0</div> <div class="lbl">WiFi</div></div>
+    <div class="stat ble">    <div class="val" id="cnt-ble">0</div>  <div class="lbl">BLE</div></div>
+    <div class="stat packets"><div class="val" id="cnt-pkts">0</div> <div class="lbl">Pkts</div></div>
   </div>
 
   <!-- KISMET STATS -->
   <div class="stats" id="kismet-stats" style="display:none">
     <div class="stat total"> <div class="val" id="k-total">0</div><div class="lbl">Total</div></div>
-    <div class="stat wifi">  <div class="val" id="k-wifi">0</div> <div class="lbl">WiFi</div></div>
-    <div class="stat ble">   <div class="val" id="k-ble">0</div>  <div class="lbl">BT</div></div>
-    <div class="stat kismet"><div class="val" id="k-pkts">0</div> <div class="lbl">Pkts</div></div>
+    <div class="stat wifi">  <div class="val" id="k-aps">0</div>   <div class="lbl">APs</div></div>
+    <div class="stat ble">   <div class="val" id="k-clients">0</div><div class="lbl">Clients</div></div>
+    <div class="stat kismet"><div class="val" id="k-bt">0</div>    <div class="lbl">BT</div></div>
   </div>
 
   <div class="tabs">
@@ -300,6 +310,12 @@
 
 <!-- KISMET PANEL -->
 <div class="panel" id="panel-kismet">
+  <div class="subtabs">
+    <div class="subtab active" data-filter="all">ALL</div>
+    <div class="subtab"        data-filter="aps">APs</div>
+    <div class="subtab"        data-filter="clients">CLIENTS</div>
+    <div class="subtab"        data-filter="bt">BT</div>
+  </div>
   <div class="feed" id="kismet-feed"></div>
 </div>
 
@@ -310,19 +326,19 @@
 </div>
 
 <script>
-  // ── ELEMENTS ──
   const pulse      = document.getElementById("pulse");
   const lastUpdate = document.getElementById("last-update");
+  const flockFeed  = document.getElementById("flock-feed");
+  const kismetFeed = document.getElementById("kismet-feed");
+  const flockStats = document.getElementById("flock-stats");
+  const kismetStats= document.getElementById("kismet-stats");
 
-  const flockFeed   = document.getElementById("flock-feed");
-  const kismetFeed  = document.getElementById("kismet-feed");
+  let activeTab    = "flock";
+  let kismetFilter = "all";
+  let kismetCache  = [];
 
-  const flockStats  = document.getElementById("flock-stats");
-  const kismetStats = document.getElementById("kismet-stats");
 
-  // ── TABS ──
-  let activeTab = "flock";
-
+  // ── MAIN TABS ──
   document.querySelectorAll(".tab").forEach(tab => {
     tab.addEventListener("click", () => {
       document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -334,8 +350,18 @@
 
       flockStats.style.display  = activeTab === "flock"  ? "grid" : "none";
       kismetStats.style.display = activeTab === "kismet" ? "grid" : "none";
-
       pulse.className = activeTab === "kismet" ? "pulse kismet-live" : "pulse live";
+    });
+  });
+
+
+  // ── KISMET SUB-TABS ──
+  document.querySelectorAll(".subtab").forEach(st => {
+    st.addEventListener("click", () => {
+      document.querySelectorAll(".subtab").forEach(s => s.classList.remove("active"));
+      st.classList.add("active");
+      kismetFilter = st.dataset.filter;
+      renderKismetFeed(kismetCache);
     });
   });
 
@@ -347,7 +373,7 @@
     document.getElementById("cnt-ble").textContent   = devices.filter(d => d.type === "ble").length;
     document.getElementById("cnt-pkts").textContent  = devices.reduce((s, d) => s + (d.frame_count || 0), 0);
 
-    if (devices.length === 0) {
+    if (!devices.length) {
       flockFeed.innerHTML = `<div class="empty"><div class="icon">📡</div>Scanning... no Flock cameras found yet.</div>`;
       return;
     }
@@ -365,7 +391,7 @@
 
       const frames = d.frame_count || 0;
       const hot    = frames >= 10;
-      const framesBadge = frames > 0 ? `<span class="frames ${hot ? "hot" : ""}">${frames} pkts</span>` : "";
+      const pktBadge = frames > 0 ? `<span class="frames ${hot ? "hot" : ""}">${frames} pkts</span>` : "";
 
       return `
         <div class="card ${type}">
@@ -375,40 +401,50 @@
           </div>
           <div class="name">${name}</div>
           <div class="mac">${mac}</div>
-          <div class="meta">${extras}${framesBadge}<span>${time}</span></div>
+          <div class="meta">${extras}${pktBadge}<span>${time}</span></div>
         </div>`;
     }).join("");
   }
 
 
-  // ── KISMET RENDER ──
-  function renderKismet(devices) {
-    const wifi = devices.filter(d => (d.type || "").toLowerCase().includes("wi-fi"));
-    const bt   = devices.filter(d => (d.type || "").toLowerCase().includes("bluetooth"));
-    const pkts = devices.reduce((s, d) => s + (d.packets || 0), 0);
+  // ── KISMET FILTER HELPER ──
+  function filterKismet(devices) {
+    const t = (d) => (d.type || "").toLowerCase();
+    if (kismetFilter === "aps")     return devices.filter(d => t(d) === "wi-fi ap");
+    if (kismetFilter === "clients") return devices.filter(d => t(d).includes("wi-fi") && t(d) !== "wi-fi ap");
+    if (kismetFilter === "bt")      return devices.filter(d => t(d).includes("bluetooth") || t(d).includes("btle"));
+    return devices;
+  }
 
-    document.getElementById("k-total").textContent = devices.length;
-    document.getElementById("k-wifi").textContent  = wifi.length;
-    document.getElementById("k-ble").textContent   = bt.length;
-    document.getElementById("k-pkts").textContent  = pkts;
 
-    if (devices.length === 0) {
-      kismetFeed.innerHTML = `<div class="empty"><div class="icon">📻</div>Kismet scanning... no devices yet.</div>`;
+  // ── KISMET FEED RENDER ──
+  function renderKismetFeed(devices) {
+    const filtered = filterKismet(devices);
+
+    if (!filtered.length) {
+      const label = kismetFilter === "all" ? "Kismet scanning... no devices yet." : `No ${kismetFilter.toUpperCase()} devices found yet.`;
+      kismetFeed.innerHTML = `<div class="empty"><div class="icon">📻</div>${label}</div>`;
       return;
     }
 
-    kismetFeed.innerHTML = [...devices].sort((a, b) => (b.last_seen || 0) - (a.last_seen || 0)).map(d => {
-      const name    = d.name || "<unknown>";
-      const mac     = d.mac  || "—";
-      const rssi    = d.rssi != null ? `${d.rssi} dBm` : "—";
-      const channel = d.channel || "—";
-      const vendor  = d.vendor  || "—";
-      const type    = d.type    || "unknown";
-      const packets = d.packets || 0;
-      const lastSeen = d.last_seen ? new Date(d.last_seen * 1000).toLocaleTimeString() : "—";
+    kismetFeed.innerHTML = [...filtered].sort((a, b) => (b.last_seen || 0) - (a.last_seen || 0)).map(d => {
+      const name       = d.name       || "<unknown>";
+      const mac        = d.mac        || "—";
+      const rssi       = d.rssi  != null ? `${d.rssi} dBm` : "—";
+      const channel    = d.channel    || "—";
+      const vendor     = d.vendor     || "—";
+      const type       = d.type       || "unknown";
+      const packets    = d.packets    || 0;
+      const encryption = d.encryption || null;
+      const firstSeen  = d.first_seen ? new Date(d.first_seen * 1000).toLocaleTimeString() : "—";
+      const lastSeen   = d.last_seen  ? new Date(d.last_seen  * 1000).toLocaleTimeString() : "—";
 
-      const hot = packets >= 50;
+      const freqMhz = parseInt(d.frequency) || 0;
+      const freq    = freqMhz >= 5000 ? "5GHz" : freqMhz >= 2400 ? "2.4GHz" : "—";
+
+      const hot      = packets >= 50;
       const pktBadge = packets > 0 ? `<span class="frames ${hot ? "hot" : ""}">${packets} pkts</span>` : "";
+      const encBadge = encryption    ? `<span><b>enc</b> ${encryption}</span>` : "";
 
       return `
         <div class="card kismet">
@@ -420,12 +456,33 @@
           <div class="mac">${mac}</div>
           <div class="meta">
             <span><b>ch</b> ${channel}</span>
+            <span><b>freq</b> ${freq}</span>
             <span><b>vendor</b> ${vendor}</span>
+            ${encBadge}
             ${pktBadge}
-            <span>${lastSeen}</span>
+            <span><b>first</b> ${firstSeen}</span>
+            <span><b>last</b> ${lastSeen}</span>
           </div>
         </div>`;
     }).join("");
+  }
+
+
+  // ── KISMET STATS + CACHE ──
+  function renderKismet(devices) {
+    kismetCache = devices;
+
+    const t   = (d) => (d.type || "").toLowerCase();
+    const aps     = devices.filter(d => t(d) === "wi-fi ap");
+    const clients = devices.filter(d => t(d).includes("wi-fi") && t(d) !== "wi-fi ap");
+    const bt      = devices.filter(d => t(d).includes("bluetooth") || t(d).includes("btle"));
+
+    document.getElementById("k-total").textContent   = devices.length;
+    document.getElementById("k-aps").textContent     = aps.length;
+    document.getElementById("k-clients").textContent = clients.length;
+    document.getElementById("k-bt").textContent      = bt.length;
+
+    renderKismetFeed(devices);
   }
 
 
