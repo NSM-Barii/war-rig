@@ -35,7 +35,7 @@ echo "[+] Installing Kismet..."
 KISMET_OK=false
 
 if wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key --quiet 2>/dev/null | gpg --dearmor | tee /usr/share/keyrings/kismet-archive-keyring.gpg >/dev/null; then
-    echo 'deb [signed-by=/usr/share/keyrings/kismet-archive-keyring.gpg] https://www.kismetwireless.net/repos/apt/release/bookworm bookworm main' | tee /etc/apt/sources.list.d/kismet.list >/dev/null
+    echo 'deb [signed-by=/usr/share/keyrings/kismet-archive-keyring.gpg] https://www.kismetwireless.net/repos/apt/release/kali-rolling kali-rolling main' | tee /etc/apt/sources.list.d/kismet.list >/dev/null
     apt update -qq
 
     if apt install -y kismet 2>/dev/null; then
@@ -60,13 +60,7 @@ echo ""
 echo "[+] Installing kernel headers for $ARCH (kernel $KERNEL)..."
 apt install --no-install-recommends -y dkms build-essential git bc libelf-dev
 
-if [[ "$KERNEL" == *"rpi-2712"* ]]; then
-    apt install -y linux-headers-rpi-2712
-elif [[ "$ARCH" == "aarch64" ]]; then
-    apt install -y linux-headers-rpi-v8
-else
-    apt install -y linux-headers-rpi-v7l
-fi
+apt install -y kalipi-kernel-headers
 
 if [ ! -d "/lib/modules/$KERNEL/build" ]; then
     echo "[!] Headers not found at /lib/modules/$KERNEL/build — aborting"
@@ -107,15 +101,10 @@ if [ "$MAJOR" -gt 6 ] || { [ "$MAJOR" -eq 6 ] && [ "$MINOR" -ge 14 ]; }; then
     git clone https://github.com/lwfinger/rtw88.git /tmp/rtw88
     cd /tmp/rtw88 && make && make install && depmod -a
 else
-    echo "[*] Using aircrack-ng/rtl8812au"
-    rm -rf /tmp/rtl8812au
-    git clone https://github.com/aircrack-ng/rtl8812au.git /tmp/rtl8812au
-    cd /tmp/rtl8812au
-    sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' Makefile
-    sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makefile
-    export ARCH=arm64
-    sed -i 's/^MAKE="/MAKE="ARCH=arm64 /' dkms.conf
-    make dkms_install
+    echo "[*] Kernel below 6.14 — using morrownr/8821au"
+    rm -rf /tmp/8821au
+    git clone https://github.com/morrownr/8821au-20210708.git /tmp/8821au
+    cd /tmp/8821au && ./install-driver.sh NoPrompt
 fi
 echo "[+] AWUS036ACS done"
 echo ""

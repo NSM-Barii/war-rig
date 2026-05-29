@@ -38,13 +38,7 @@ echo "[+] Installing kernel headers for $ARCH (kernel $KERNEL)..."
 apt update -qq
 apt install --no-install-recommends -y dkms build-essential git bc libelf-dev
 
-if [[ "$KERNEL" == *"rpi-2712"* ]]; then
-    apt install -y linux-headers-rpi-2712
-elif [[ "$ARCH" == "aarch64" ]]; then
-    apt install -y linux-headers-rpi-v8
-else
-    apt install -y linux-headers-rpi-v7l
-fi
+apt install -y kalipi-kernel-headers
 
 if [ ! -d "/lib/modules/$KERNEL/build" ]; then
     echo "[!] Headers not found at /lib/modules/$KERNEL/build — aborting"
