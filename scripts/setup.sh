@@ -81,9 +81,8 @@ echo "[+] Cleaning old driver state..."
 dkms remove rtl8814au/4.3.21  --all 2>/dev/null || true
 dkms remove 8814au/5.8.5.1    --all 2>/dev/null || true
 dkms remove 8821au/5.12.5.2   --all 2>/dev/null || true
-dkms remove rtl8821au/5.12.5.2 --all 2>/dev/null || true
-rm -rf /usr/src/rtl8814au-* /usr/src/8814au-* /usr/src/8821au-* /usr/src/rtl8812au-*
-rm -rf /tmp/rtl8814au /tmp/rtl8812au /tmp/rtw88
+rm -rf /usr/src/8814au-* /usr/src/8821au-* /usr/src/rtl8812au-*
+rm -rf /tmp/8814au /tmp/8821au /tmp/rtl8812au /tmp/rtw88
 
 echo "[+] Increasing swap for build..."
 dphys-swapfile swapoff 2>/dev/null || true
@@ -91,35 +90,33 @@ sed -i 's/CONF_SWAPSIZE=.*/CONF_SWAPSIZE=2000/' /etc/dphys-swapfile 2>/dev/null 
 dphys-swapfile setup 2>/dev/null || true
 dphys-swapfile swapon 2>/dev/null || true
 
-echo "[+] Installing AWUS1900 driver (zebulon2/rtl8814au v4.3.21)..."
-rm -rf /tmp/rtl8814au /usr/src/rtl8814au-4.3.21
-git clone https://github.com/zebulon2/rtl8814au.git /tmp/rtl8814au
-
-sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' /tmp/rtl8814au/Makefile
-sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' /tmp/rtl8814au/Makefile
-
-cp -R /tmp/rtl8814au /usr/src/rtl8814au-4.3.21
-
-if dkms build -m rtl8814au -v 4.3.21 && dkms install -m rtl8814au -v 4.3.21; then
-    echo "[+] AWUS1900 done"
-else
-    echo "[!] Build failed — check: cat /var/lib/dkms/rtl8814au/4.3.21/build/make.log"
-    exit 1
-fi
+echo "[+] Installing AWUS1900 driver (morrownr/8814au)..."
+rm -rf /tmp/8814au
+git clone https://github.com/morrownr/8814au.git /tmp/8814au
+cd /tmp/8814au && ./install-driver.sh NoPrompt
+echo "[+] AWUS1900 done"
 echo ""
 
-echo "[+] Installing AWUS036ACS driver (aircrack-ng/rtl8812au)..."
-rm -rf /tmp/rtl8812au
-git clone https://github.com/aircrack-ng/rtl8812au.git /tmp/rtl8812au
-cd /tmp/rtl8812au
+MAJOR=$(echo "$KERNEL" | cut -d'.' -f1)
+MINOR=$(echo "$KERNEL" | cut -d'.' -f2)
 
-sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' Makefile
-sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makefile
-export ARCH=arm64
-sed -i 's/^MAKE="/MAKE="ARCH=arm64 /' dkms.conf
-
-make dkms_install
-
+echo "[+] Installing AWUS036ACS driver..."
+if [ "$MAJOR" -gt 6 ] || { [ "$MAJOR" -eq 6 ] && [ "$MINOR" -ge 14 ]; }; then
+    echo "[*] Kernel 6.14+ — using lwfinger/rtw88"
+    rm -rf /tmp/rtw88
+    git clone https://github.com/lwfinger/rtw88.git /tmp/rtw88
+    cd /tmp/rtw88 && make && make install && depmod -a
+else
+    echo "[*] Using aircrack-ng/rtl8812au"
+    rm -rf /tmp/rtl8812au
+    git clone https://github.com/aircrack-ng/rtl8812au.git /tmp/rtl8812au
+    cd /tmp/rtl8812au
+    sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' Makefile
+    sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' Makefile
+    export ARCH=arm64
+    sed -i 's/^MAKE="/MAKE="ARCH=arm64 /' dkms.conf
+    make dkms_install
+fi
 echo "[+] AWUS036ACS done"
 echo ""
 

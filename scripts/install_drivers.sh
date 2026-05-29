@@ -64,7 +64,10 @@ git clone https://github.com/zebulon2/rtl8814au.git /tmp/rtl8814au
 sed -i 's/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g' /tmp/rtl8814au/Makefile
 sed -i 's/CONFIG_PLATFORM_ARM64_RPI = n/CONFIG_PLATFORM_ARM64_RPI = y/g' /tmp/rtl8814au/Makefile
 
-cp -R /tmp/rtl8814au /usr/src/rtl8814au-4.3.21
+mkdir -p /usr/src/rtl8814au-4.3.21
+cp -R /tmp/rtl8814au/. /usr/src/rtl8814au-4.3.21/
+
+dkms add -m rtl8814au -v 4.3.21
 
 if dkms build -m rtl8814au -v 4.3.21 && dkms install -m rtl8814au -v 4.3.21; then
     echo "[+] AWUS1900 done"
