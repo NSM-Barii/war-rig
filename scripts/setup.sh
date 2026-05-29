@@ -78,12 +78,12 @@ echo ""
 
 
 # ── SYSTEMD SERVICE ───────────────────────────────────────
-echo "[+] Installing warrig service..."
+echo "[+] Installing dooku service..."
 sed "s|ExecStart=.*|ExecStart=$SCRIPT_DIR/venv/bin/python $SCRIPT_DIR/start.py|" \
-    "$BASE/config/warrig.service" > /etc/systemd/system/warrig.service
+    "$BASE/config/dooku.service" > /etc/systemd/system/dooku.service
 systemctl daemon-reload
-systemctl enable warrig.service
-echo "[+] warrig.service enabled — ExecStart: $SCRIPT_DIR/start.py"
+systemctl enable dooku.service
+echo "[+] dooku.service enabled — ExecStart: $SCRIPT_DIR/start.py"
 echo ""
 
 

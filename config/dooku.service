@@ -1,0 +1,16 @@
+[Unit]
+Description=Dooku NSM Suite
+After=network.target bluetooth.target
+Conflicts=hostapd.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /home/pi/war-rig/scripts/start.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

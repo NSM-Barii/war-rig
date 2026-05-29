@@ -113,7 +113,7 @@ class Handler(BaseHTTPRequestHandler):
         def teardown():
             import time; time.sleep(0.5)
             subprocess.run(["pkill", "-x", "hostapd"],                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            subprocess.run(["rm", "-f", "/etc/dnsmasq.d/warrig.conf"],              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["rm", "-f", "/etc/dnsmasq.d/dooku.conf"],               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["systemctl", "restart", "dnsmasq"],                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["nmcli", "dev", "set", "wlan0", "managed", "yes"],      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             self.server.shutdown()
@@ -158,7 +158,7 @@ class Dashboard_Server():
 
 
         Dashboard_Server.server = HTTPServer(("0.0.0.0", PORT), Handler)
-        console.print(f"[bold green][+] Dashboard:[bold yellow] http://10.10.10.1:{PORT}")
+        console.print(f"[bold green][+] Dooku Dashboard:[bold yellow] http://10.10.10.1:{PORT}")
         Dashboard_Server.server.serve_forever()
 
 

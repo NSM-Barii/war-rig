@@ -99,7 +99,7 @@ class Boot():
             subprocess.run(["ip", "addr", "add",   cls.AP_IP, "dev", cls.AP_IFACE], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["ip", "link", "set",   cls.AP_IFACE, "up"],             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-            subprocess.run(["cp", str(DNSMASQ_CONF), "/etc/dnsmasq.d/warrig.conf"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["cp", str(DNSMASQ_CONF), "/etc/dnsmasq.d/dooku.conf"],  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["systemctl", "restart", "dnsmasq"],                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.Popen(["hostapd", "-B", str(HOSTAPD_CONF)],                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
@@ -111,7 +111,7 @@ class Boot():
                 console.print(f"[bold red][!] hostapd failed to start — check {HOSTAPD_CONF}[/bold red]")
                 return False
 
-            console.print("[bold green][+][/bold green]  AP live — SSID: WarRig @ 10.10.10.1")
+            console.print("[bold green][+][/bold green]  AP live — SSID: Dooku @ 10.10.10.1")
             return True
 
         except Exception as e: console.print(f"[bold red][!] AP Error:[bold yellow] {e}")
@@ -191,7 +191,7 @@ class Boot():
     def _start_dashboard(cls):
         """Launch the dashboard server — blocks until SSH MODE is triggered"""
 
-        console.print("[bold green][+][/bold green]  Starting dashboard at http://10.10.10.1:5000")
+        console.print("[bold green][+][/bold green]  Starting Dooku dashboard at http://10.10.10.1:5000")
 
         subprocess.run(["python3", str(SERVER)])
 
@@ -200,7 +200,7 @@ class Boot():
     def main(cls):
         """Run from here"""
 
-        console.print(f"[bold green][+] War-rig starting")
+        console.print(f"[bold green][+] Dooku starting")
 
         cls._unblock_rf()
         cls._setup_kismet_auth()

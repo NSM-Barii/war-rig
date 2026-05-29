@@ -6,15 +6,15 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-echo "[+] Starting warrig service..."
-systemctl start warrig.service
+echo "[+] Starting dooku service..."
+systemctl start dooku.service
 
 sleep 1
-status=$(systemctl is-active warrig.service)
+status=$(systemctl is-active dooku.service)
 
 if [ "$status" = "active" ]; then
-    echo "[+] warrig is up"
+    echo "[+] Dooku is up"
 else
-    echo "[!] warrig failed to start — check: journalctl -u warrig -n 30"
+    echo "[!] Dooku failed to start — check: journalctl -u dooku -n 30"
     exit 1
 fi
