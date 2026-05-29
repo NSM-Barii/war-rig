@@ -76,10 +76,17 @@ dkms remove 8821au/5.12.5.2  --all 2>/dev/null || true
 rm -rf /usr/src/rtl8814au-* /usr/src/8814au-* /usr/src/8821au-*
 rm -rf /tmp/8814au /tmp/8821au /tmp/rtw88
 
-echo "[+] Installing AWUS1900 driver (morrownr/8814au)..."
-git clone https://github.com/morrownr/8814au.git /tmp/8814au
-cd /tmp/8814au && ./install-driver.sh NoPrompt
-echo "[+] AWUS1900 done"
+echo "[+] Installing AWUS1900 driver (zebulon2/rtl8814au v4.3.21)..."
+rm -rf /tmp/rtl8814au /usr/src/rtl8814au-4.3.21
+git clone https://github.com/zebulon2/rtl8814au.git /tmp/rtl8814au
+cp -R /tmp/rtl8814au /usr/src/rtl8814au-4.3.21
+
+if dkms build -m rtl8814au -v 4.3.21 && dkms install -m rtl8814au -v 4.3.21; then
+    echo "[+] AWUS1900 done"
+else
+    echo "[!] Build failed — check: cat /var/lib/dkms/rtl8814au/4.3.21/build/make.log"
+    exit 1
+fi
 echo ""
 
 MAJOR=$(echo "$KERNEL" | cut -d'.' -f1)
@@ -133,6 +140,28 @@ echo "[+] dooku.service enabled"
 echo ""
 
 
+# ── DEBUG SUMMARY ─────────────────────────────────────────
+echo "===== KERNEL ====="
+uname -r
+
+echo ""
+echo "===== INTERFACES ====="
+ip link show
+
+echo ""
+echo "===== DKMS STATUS ====="
+dkms status
+
+echo ""
+echo "===== LOADED MODULES ====="
+lsmod | grep -E "rtl|88|8814|8821" || echo "none"
+
+echo ""
+echo "===== USB DEVICES ====="
+lsusb
+
+
 # ── DONE ──────────────────────────────────────────────────
+echo ""
 echo "[+] Setup complete — reboot to start"
 echo ""

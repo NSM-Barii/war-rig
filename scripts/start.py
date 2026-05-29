@@ -92,6 +92,7 @@ class Boot():
         console.print(f"[bold green][+][/bold green]  Bringing up AP on {cls.AP_IFACE}...")
 
         try:
+            subprocess.run(["pkill", "-x", "hostapd"],                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["nmcli", "dev", "set", cls.AP_IFACE, "managed", "no"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
             subprocess.run(["ip", "link", "set",  cls.AP_IFACE, "down"],            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -193,7 +194,8 @@ class Boot():
 
         console.print("[bold green][+][/bold green]  Starting Dooku dashboard at http://10.10.10.1:5000")
 
-        subprocess.run(["python3", str(SERVER)])
+        venv_python = str(Path(__file__).parent / "venv" / "bin" / "python")
+        subprocess.run([venv_python, str(SERVER)])
 
 
     @classmethod
