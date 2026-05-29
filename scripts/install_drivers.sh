@@ -67,16 +67,18 @@ MINOR=$(echo "$KERNEL" | cut -d'.' -f2)
 
 echo "[+] Installing AWUS036ACS driver (kernel $KERNEL)..."
 
-if [ "$MAJOR" -gt 6 ] || { [ "$MAJOR" -eq 6 ] && [ "$MINOR" -ge 14 ]; }; then
+if modprobe rtw88_8821au 2>/dev/null; then
+    echo "[+] AWUS036ACS using in-kernel rtw88 driver"
+elif [ "$MAJOR" -gt 6 ] || { [ "$MAJOR" -eq 6 ] && [ "$MINOR" -ge 14 ]; }; then
     echo "[*] Kernel 6.14+ — using lwfinger/rtw88"
     rm -rf /tmp/rtw88
     git clone https://github.com/lwfinger/rtw88.git /tmp/rtw88
     cd /tmp/rtw88 && make && make install && depmod -a
 else
-    echo "[*] Kernel below 6.14 — using morrownr/8821au"
-    rm -rf /tmp/8821au
-    git clone https://github.com/morrownr/8821au-20210708.git /tmp/8821au
-    cd /tmp/8821au && ./install-driver.sh NoPrompt
+    echo "[*] Using aircrack-ng/rtl8812au"
+    rm -rf /tmp/rtl8812au
+    git clone https://github.com/aircrack-ng/rtl8812au.git /tmp/rtl8812au
+    cd /tmp/rtl8812au && make dkms_install
 fi
 
 echo "[+] AWUS036ACS done"
