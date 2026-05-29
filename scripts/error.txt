@@ -1,7 +1,0 @@
- sudo pacman -S dnsmasq
-resolving dependencies...
-looking for conflicting packages...
-error: failed to prepare transaction (could not satisfy dependencies)
-:: installing nettle (4.0-1) breaks dependency 'libhogweed.so=6-64' required by openconnect
-:: installing nettle (4.0-1) breaks dependency 'libnettle.so=8-64' required by sequoia-sq
-:: installing nettle (4.0-1) breaks dependency 'libhogweed.so=6-64' required by sequoia-s
