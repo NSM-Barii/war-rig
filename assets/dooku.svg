@@ -1,152 +1,197 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320">
   <defs>
-    <filter id="saberGlow" x="-100%" y="-100%" width="300%" height="300%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
+    <linearGradient id="bgMain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#030108"/>
+      <stop offset="50%"  stop-color="#07020f"/>
+      <stop offset="100%" stop-color="#020106"/>
+    </linearGradient>
+    <radialGradient id="neb1" cx="22%" cy="68%" r="48%">
+      <stop offset="0%"   stop-color="#240032" stop-opacity="0.65"/>
+      <stop offset="60%"  stop-color="#0e001a" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#030108" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="neb2" cx="78%" cy="32%" r="42%">
+      <stop offset="0%"   stop-color="#1c0028" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#030108" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="neb3" cx="50%" cy="50%" r="38%">
+      <stop offset="0%"   stop-color="#14000c" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#030108" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="65%">
+      <stop offset="0%"   stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.72"/>
+    </radialGradient>
+    <linearGradient id="goldText" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#f8ea90"/>
+      <stop offset="28%"  stop-color="#d4a030"/>
+      <stop offset="62%"  stop-color="#9a7020"/>
+      <stop offset="100%" stop-color="#583a08"/>
+    </linearGradient>
+    <filter id="glowXL" x="-400%" y="-400%" width="900%" height="900%">
+      <feGaussianBlur stdDeviation="20"/>
+    </filter>
+    <filter id="glowL" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+    <filter id="glowM" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="4.5"/>
+    </filter>
+    <filter id="glowS" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+    <filter id="textBloom" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="saberCore" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%">
+    <filter id="textGlow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="4" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%"   stop-color="#f7e08a"/>
-      <stop offset="40%"  stop-color="#c8a84b"/>
-      <stop offset="100%" stop-color="#7a5c10"/>
-    </linearGradient>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%"   stop-color="#080205"/>
-      <stop offset="50%"  stop-color="#0f0308"/>
-      <stop offset="100%" stop-color="#050105"/>
-    </linearGradient>
-    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#3d0a0a" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#080205" stop-opacity="0"/>
-    </radialGradient>
   </defs>
 
-  <!-- Background -->
-  <rect width="900" height="320" fill="url(#bgGrad)"/>
-  <rect width="900" height="320" fill="url(#centerGlow)"/>
+  <!-- Background + nebula -->
+  <rect width="900" height="320" fill="url(#bgMain)"/>
+  <rect width="900" height="320" fill="url(#neb1)"/>
+  <rect width="900" height="320" fill="url(#neb2)"/>
+  <rect width="900" height="320" fill="url(#neb3)"/>
 
-  <!-- Stars layer 1 — dim -->
-  <g fill="#ffffff" opacity="0.25">
-    <circle cx="30"  cy="12"  r="0.8"/><circle cx="87"  cy="45"  r="0.6"/>
-    <circle cx="145" cy="8"   r="0.9"/><circle cx="203" cy="31"  r="0.5"/>
-    <circle cx="260" cy="19"  r="0.7"/><circle cx="318" cy="5"   r="0.6"/>
-    <circle cx="375" cy="27"  r="0.8"/><circle cx="432" cy="14"  r="0.5"/>
-    <circle cx="490" cy="38"  r="0.9"/><circle cx="547" cy="9"   r="0.6"/>
-    <circle cx="605" cy="22"  r="0.7"/><circle cx="662" cy="43"  r="0.8"/>
-    <circle cx="720" cy="7"   r="0.5"/><circle cx="777" cy="28"  r="0.9"/>
-    <circle cx="835" cy="16"  r="0.6"/><circle cx="870" cy="41"  r="0.7"/>
-    <circle cx="15"  cy="80"  r="0.6"/><circle cx="72"  cy="110" r="0.8"/>
-    <circle cx="130" cy="95"  r="0.5"/><circle cx="188" cy="120" r="0.7"/>
-    <circle cx="780" cy="90"  r="0.8"/><circle cx="830" cy="115" r="0.6"/>
-    <circle cx="855" cy="75"  r="0.9"/><circle cx="893" cy="100" r="0.5"/>
-    <circle cx="20"  cy="230" r="0.7"/><circle cx="60"  cy="260" r="0.5"/>
-    <circle cx="110" cy="245" r="0.8"/><circle cx="800" cy="240" r="0.6"/>
-    <circle cx="845" cy="265" r="0.9"/><circle cx="880" cy="250" r="0.7"/>
-    <circle cx="40"  cy="300" r="0.5"/><circle cx="95"  cy="310" r="0.8"/>
-    <circle cx="820" cy="295" r="0.6"/><circle cx="870" cy="305" r="0.7"/>
+  <!-- Stars: faint -->
+  <g fill="#ffffff" opacity="0.18">
+    <circle cx="22"  cy="14"  r="0.7"/><circle cx="65"  cy="38"  r="0.6"/>
+    <circle cx="103" cy="11"  r="0.8"/><circle cx="148" cy="27"  r="0.5"/>
+    <circle cx="187" cy="8"   r="0.7"/><circle cx="231" cy="42"  r="0.6"/>
+    <circle cx="268" cy="17"  r="0.8"/><circle cx="315" cy="5"   r="0.5"/>
+    <circle cx="358" cy="33"  r="0.7"/><circle cx="402" cy="12"  r="0.6"/>
+    <circle cx="445" cy="26"  r="0.8"/><circle cx="488" cy="7"   r="0.5"/>
+    <circle cx="532" cy="40"  r="0.7"/><circle cx="575" cy="18"  r="0.6"/>
+    <circle cx="618" cy="9"   r="0.8"/><circle cx="661" cy="35"  r="0.5"/>
+    <circle cx="704" cy="22"  r="0.7"/><circle cx="748" cy="4"   r="0.6"/>
+    <circle cx="791" cy="31"  r="0.8"/><circle cx="834" cy="16"  r="0.5"/>
+    <circle cx="873" cy="44"  r="0.7"/>
+    <circle cx="18"  cy="82"  r="0.6"/><circle cx="55"  cy="105" r="0.7"/>
+    <circle cx="92"  cy="88"  r="0.5"/><circle cx="140" cy="118" r="0.6"/>
+    <circle cx="178" cy="97"  r="0.8"/><circle cx="820" cy="85"  r="0.6"/>
+    <circle cx="853" cy="108" r="0.7"/><circle cx="877" cy="72"  r="0.5"/>
+    <circle cx="12"  cy="225" r="0.6"/><circle cx="48"  cy="248" r="0.7"/>
+    <circle cx="86"  cy="238" r="0.5"/><circle cx="820" cy="235" r="0.6"/>
+    <circle cx="857" cy="255" r="0.7"/><circle cx="882" cy="241" r="0.5"/>
+    <circle cx="30"  cy="295" r="0.6"/><circle cx="72"  cy="308" r="0.7"/>
+    <circle cx="115" cy="298" r="0.5"/><circle cx="828" cy="292" r="0.6"/>
+    <circle cx="862" cy="310" r="0.7"/>
   </g>
 
-  <!-- Stars layer 2 — brighter -->
-  <g fill="#ffffff" opacity="0.6">
-    <circle cx="55"  cy="25"  r="1.2"/><circle cx="170" cy="48"  r="1.0"/>
-    <circle cx="295" cy="11"  r="1.3"/><circle cx="420" cy="33"  r="0.9"/>
-    <circle cx="545" cy="20"  r="1.1"/><circle cx="670" cy="15"  r="1.2"/>
-    <circle cx="795" cy="38"  r="1.0"/><circle cx="860" cy="22"  r="1.3"/>
-    <circle cx="25"  cy="270" r="1.1"/><circle cx="155" cy="285" r="0.9"/>
-    <circle cx="750" cy="275" r="1.2"/><circle cx="875" cy="288" r="1.0"/>
+  <!-- Stars: medium -->
+  <g fill="#ffffff" opacity="0.48">
+    <circle cx="42"  cy="22"  r="1.0"/><circle cx="127" cy="19"  r="0.9"/>
+    <circle cx="213" cy="36"  r="1.1"/><circle cx="299" cy="11"  r="0.9"/>
+    <circle cx="385" cy="28"  r="1.0"/><circle cx="471" cy="9"   r="1.1"/>
+    <circle cx="557" cy="31"  r="0.9"/><circle cx="643" cy="14"  r="1.0"/>
+    <circle cx="729" cy="25"  r="1.1"/><circle cx="815" cy="8"   r="0.9"/>
+    <circle cx="863" cy="34"  r="1.0"/>
+    <circle cx="25"  cy="278" r="0.9"/><circle cx="118" cy="288" r="1.0"/>
+    <circle cx="745" cy="282" r="1.1"/><circle cx="868" cy="275" r="0.9"/>
   </g>
 
-  <!-- Stars layer 3 — brightest -->
-  <g fill="#ffffff" opacity="0.9">
-    <circle cx="110" cy="18"  r="1.5"/><circle cx="460" cy="8"   r="1.4"/>
-    <circle cx="740" cy="25"  r="1.6"/><circle cx="68"  cy="290" r="1.4"/>
-    <circle cx="832" cy="282" r="1.5"/>
+  <!-- Stars: bright -->
+  <g fill="#ffffff" opacity="0.88">
+    <circle cx="82"  cy="15"  r="1.5"/>
+    <circle cx="420" cy="6"   r="1.3"/>
+    <circle cx="758" cy="19"  r="1.6"/>
+    <circle cx="55"  cy="288" r="1.3"/>
+    <circle cx="846" cy="280" r="1.4"/>
   </g>
 
-  <!-- Curved lightsaber blade — outer glow -->
-  <line x1="0" y1="260" x2="900" y2="60"
-        stroke="#8b0000" stroke-width="20" stroke-linecap="round"
-        opacity="0.15" filter="url(#saberGlow)"/>
+  <!-- Star cross-flares on two bright stars -->
+  <g stroke="#ffffff" stroke-width="0.5" opacity="0.45">
+    <line x1="82"  y1="11"  x2="82"  y2="19" /><line x1="78"  y1="15"  x2="86"  y2="15" />
+    <line x1="758" y1="15"  x2="758" y2="23" /><line x1="754" y1="19"  x2="762" y2="19" />
+  </g>
 
-  <!-- Curved lightsaber blade — mid glow -->
-  <line x1="0" y1="260" x2="900" y2="60"
-        stroke="#cc1111" stroke-width="8" stroke-linecap="round"
-        opacity="0.35" filter="url(#saberGlow)"/>
+  <!-- ── LIGHTSABER (curved quadratic bezier — Dooku's curved blade) ── -->
+  <path d="M -10 302 Q 445 155 910 18"
+        fill="none" stroke="#3a0000" stroke-width="40" stroke-linecap="round"
+        opacity="0.09" filter="url(#glowXL)"/>
+  <path d="M -10 302 Q 445 155 910 18"
+        fill="none" stroke="#880000" stroke-width="22" stroke-linecap="round"
+        opacity="0.2" filter="url(#glowL)"/>
+  <path d="M -10 302 Q 445 155 910 18"
+        fill="none" stroke="#cc1111" stroke-width="9" stroke-linecap="round"
+        opacity="0.38" filter="url(#glowM)"/>
+  <path d="M -10 302 Q 445 155 910 18"
+        fill="none" stroke="#ff3333" stroke-width="3.5" stroke-linecap="round"
+        opacity="0.62" filter="url(#glowS)"/>
+  <path d="M -10 302 Q 445 155 910 18"
+        fill="none" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round"
+        opacity="0.88"/>
 
-  <!-- Curved lightsaber blade — inner glow -->
-  <line x1="0" y1="260" x2="900" y2="60"
-        stroke="#ff3333" stroke-width="4" stroke-linecap="round"
-        opacity="0.6" filter="url(#saberCore)"/>
+  <!-- Decorative rules -->
+  <line x1="68" y1="55" x2="832" y2="55" stroke="#c8a84b" stroke-width="0.7" opacity="0.32"/>
+  <line x1="68" y1="274" x2="832" y2="274" stroke="#c8a84b" stroke-width="0.7" opacity="0.32"/>
 
-  <!-- Curved lightsaber blade — core -->
-  <line x1="0" y1="260" x2="900" y2="60"
-        stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"
-        opacity="0.85"/>
-
-  <!-- Decorative top rule -->
-  <line x1="80" y1="52" x2="820" y2="52" stroke="#c8a84b" stroke-width="0.8" opacity="0.4"/>
-
-  <!-- DOOKU main title -->
-  <text x="450" y="170"
+  <!-- DOOKU: crimson bloom -->
+  <text x="450" y="177"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="118" font-weight="bold"
+        font-size="122" font-weight="bold"
         text-anchor="middle"
-        fill="#8b0000"
-        opacity="0.25"
+        fill="#7a0000" opacity="0.2"
+        letter-spacing="18"
+        filter="url(#textBloom)">DOOKU</text>
+
+  <!-- DOOKU: gold aura -->
+  <text x="450" y="177"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="122" font-weight="bold"
+        text-anchor="middle"
+        fill="#c8912a" opacity="0.28"
         letter-spacing="18"
         filter="url(#textGlow)">DOOKU</text>
 
-  <text x="450" y="170"
+  <!-- DOOKU: main -->
+  <text x="450" y="177"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="118" font-weight="bold"
+        font-size="122" font-weight="bold"
         text-anchor="middle"
-        fill="url(#goldGrad)"
-        letter-spacing="18"
-        filter="url(#subtleGlow)">DOOKU</text>
+        fill="url(#goldText)"
+        letter-spacing="18">DOOKU</text>
+
+  <!-- Thin rule below title -->
+  <line x1="285" y1="192" x2="615" y2="192" stroke="#c8a84b" stroke-width="0.5" opacity="0.28"/>
 
   <!-- Subtitle -->
-  <text x="450" y="208"
+  <text x="450" y="214"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="15" font-weight="normal"
+        font-size="13.5"
         text-anchor="middle"
-        fill="#c8a84b"
-        letter-spacing="9"
-        opacity="0.85">NSM  WARDRIVING  SUITE</text>
+        fill="#c8a84b" letter-spacing="10" opacity="0.8">NSM  WARDRIVING  SUITE</text>
 
-  <!-- Decorative rule below subtitle -->
-  <line x1="220" y1="222" x2="680" y2="222" stroke="#c8a84b" stroke-width="0.6" opacity="0.35"/>
-
-  <!-- Small separator diamonds -->
-  <polygon points="448,218 451,222 448,226 445,222" fill="#c8a84b" opacity="0.5"/>
-
-  <!-- Bottom quote -->
-  <text x="450" y="270"
+  <!-- Quote -->
+  <text x="450" y="256"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="11.5" font-style="italic"
+        font-size="11" font-style="italic"
         text-anchor="middle"
-        fill="#7a5c10"
-        letter-spacing="1"
-        opacity="0.8">"I have become more powerful than any Jedi."  —  Count Dooku</text>
+        fill="#7a5c10" letter-spacing="1" opacity="0.72">"I have become more powerful than any Jedi."  —  Count Dooku</text>
 
-  <!-- Bottom rule -->
-  <line x1="80" y1="282" x2="820" y2="282" stroke="#c8a84b" stroke-width="0.8" opacity="0.4"/>
-
-  <!-- Corner accents -->
-  <g stroke="#c8a84b" stroke-width="1" fill="none" opacity="0.4">
-    <polyline points="80,52 60,52 60,72"/>
-    <polyline points="820,52 840,52 840,72"/>
-    <polyline points="80,282 60,282 60,262"/>
-    <polyline points="820,282 840,282 840,262"/>
+  <!-- Corner brackets — outer -->
+  <g stroke="#c8a84b" stroke-width="1.2" fill="none" opacity="0.48">
+    <polyline points="68,55 46,55 46,77"/>
+    <polyline points="832,55 854,55 854,77"/>
+    <polyline points="68,274 46,274 46,252"/>
+    <polyline points="832,274 854,274 854,252"/>
   </g>
+
+  <!-- Corner brackets — inner -->
+  <g stroke="#c8a84b" stroke-width="0.6" fill="none" opacity="0.22">
+    <polyline points="80,65 68,65 68,77"/>
+    <polyline points="820,65 832,65 832,77"/>
+    <polyline points="80,264 68,264 68,252"/>
+    <polyline points="820,264 832,264 832,252"/>
+  </g>
+
+  <!-- Diamond accents flanking subtitle -->
+  <polygon points="278,207 282,213 278,219 274,213" fill="#c8a84b" opacity="0.48"/>
+  <polygon points="622,207 626,213 622,219 618,213" fill="#c8a84b" opacity="0.48"/>
+
+  <!-- Vignette -->
+  <rect width="900" height="320" fill="url(#vignette)"/>
 </svg>

@@ -2,17 +2,6 @@
 
 <img src="assets/dooku.svg" alt="Dooku" width="100%"/>
 
-<br/>
-
-```
-██████╗  ██████╗  ██████╗ ██╗  ██╗██╗   ██╗
-██╔══██╗██╔═══██╗██╔═══██╗██║ ██╔╝██║   ██║
-██║  ██║██║   ██║██║   ██║█████╔╝ ██║   ██║
-██║  ██║██║   ██║██║   ██║██╔═██╗ ██║   ██║
-██████╔╝╚██████╔╝╚██████╔╝██║  ██╗╚██████╔╝
-╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝
-```
-
 <img src="assets/IMG_1346.jpg" alt="Dooku Wardriving Rig" width="420"/>
 
 <br/>
@@ -26,17 +15,9 @@
 
 ---
 
-<div align="center">
-
-### ⚔️ *By a Star Wars Nerd* ⚔️
+### *By a Star Wars Nerd*
 
 > **"I have become more powerful than any Jedi."** — Count Dooku
-
-</div>
-
----
-
-> ⚠️ Currently in active development and testing. Features are being built and pushed regularly.
 
 Portable wardriving rig built inside a hardened case. Raspberry Pi 5 running Kali Linux headless, multiple WiFi adapters, boots headless and runs fully automated.
 
@@ -44,31 +25,25 @@ Portable wardriving rig built inside a hardened case. Raspberry Pi 5 running Kal
 
 ## What It Does
 
-| | |
-|---|---|
-| 📡 **AP on boot** | Pi creates its own WiFi hotspot (SSID: `Dooku`). Connect your phone, open `10.10.10.1:5000` |
-| 📊 **Live dashboard** | FLOCK tab shows real-time WiFi and BLE detections. KISMET tab opens Kismet's native wardriving UI |
-| 🔍 **flock-back** | Full WiFi and BLE wardriving powered by [flock-back](https://github.com/nsm-barii/flock-back) |
-| 🌐 **Kismet** | RF wardriving across all monitor-mode adapters, accessible at `10.10.10.1:2501` |
-| 📶 **Multi-adapter** | All non-AP adapters scanning simultaneously across 2.4GHz and 5GHz |
-| ⚙️ **Auto-start** | Plug in and everything comes up on its own via systemd |
-| 🔒 **SSH MODE** | Tap button on dashboard to drop AP and hand `wlan0` back for SSH access |
+- **AP on boot** — Pi creates its own WiFi hotspot (SSID: `Dooku`). Connect your phone, open `10.10.10.1:5000`
+- **Live dashboard** — FLOCK tab shows real-time WiFi and BLE detections. KISMET tab opens Kismet's native wardriving UI at `10.10.10.1:2501`
+- **flock-back** — Full WiFi probe request sniffing and BLE wardriving via [flock-back](https://github.com/nsm-barii/flock-back)
+- **Kismet** — RF wardriving across all monitor-mode adapters with WiGLE CSV export
+- **Multi-adapter** — All non-AP adapters scanning simultaneously across 2.4GHz and 5GHz
+- **Auto-start** — Plug in and everything comes up on its own via systemd
+- **SSH MODE** — Tap button on dashboard to drop the AP and get SSH access
 
 ---
 
 ## Hardware
 
-```
-┌─────────────────────────────────┐
-│  Raspberry Pi 5 (8GB)           │
-│  Kali Linux Headless (64-bit)   │
-│  ALFA AWUS1900  — RTL8814AU     │
-│  ALFA AWUS036ACS — RTL8821AU    │
-│  Powered USB hub                │
-│  Hardened carry case            │
-│  Portable battery bank          │
-└─────────────────────────────────┘
-```
+- Raspberry Pi 5 (8GB)
+- Kali Linux Headless (64-bit)
+- ALFA AWUS1900 (RTL8814AU)
+- ALFA AWUS036ACS (RTL8821AU)
+- Powered USB hub
+- Hardened carry case
+- Portable battery bank
 
 ---
 
@@ -87,18 +62,13 @@ Installs all dependencies, drivers, and registers the `dooku` systemd service. R
 Created by **NSM-Barii** — Star Wars nerd | Cybersecurity enthusiast
 
 **NSM Toolset:**
-| Tool | Purpose |
-|---|---|
-| [Vader](https://github.com/nsm-barii/vader) | Recon & discovery |
-| [Maul](https://github.com/nsm-barii/maul) | Infrastructure mapping |
-| **Dooku** | Wardriving rig *(this)* |
+- [Vader](https://github.com/nsm-barii/vader) — Recon & discovery
+- [Maul](https://github.com/nsm-barii/maul) — Infrastructure mapping
+- [Yoda](https://github.com/nsm-barii/yoda) — Passive RF home monitoring (BLE, WiFi APs, clients, jamming detection)
+- **Dooku** — Wardriving rig *(this)*
 
 ---
-
-<div align="center">
 
 *"Your swords, please. We don't want to make a mess of things."*
 
 **Disclaimer:** For educational, ethical, and legal purposes only.
-
-</div>

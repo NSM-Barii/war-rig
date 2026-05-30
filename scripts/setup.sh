@@ -30,44 +30,22 @@ echo ""
 
 
 # ── KISMET ────────────────────────────────────────────────
+echo "[+] Installing Kismet (optional — skipped on failure)..."
 if command -v kismet &>/dev/null; then
     echo "[+] Kismet already installed — skipping"
 else
-    echo "[+] Installing Kismet..."
-
-    KISMET_OK=false
-    set +e  # don't let kismet failure kill the script
-
-    wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key --quiet 2>/dev/null \
-        | gpg --dearmor \
-        | tee /usr/share/keyrings/kismet-archive-keyring.gpg >/dev/null 2>&1
-
-    if [ -f /usr/share/keyrings/kismet-archive-keyring.gpg ]; then
+    {
+        wget -q -O /tmp/kismet-release.gpg.key \
+            https://www.kismetwireless.net/repos/kismet-release.gpg.key &&
+        gpg --dearmor < /tmp/kismet-release.gpg.key \
+            > /usr/share/keyrings/kismet-archive-keyring.gpg &&
         echo 'deb [signed-by=/usr/share/keyrings/kismet-archive-keyring.gpg] https://www.kismetwireless.net/repos/apt/release/kali-rolling kali-rolling main' \
-            | tee /etc/apt/sources.list.d/kismet.list >/dev/null
-        apt update -qq 2>/dev/null
-
-        if apt install -y kismet 2>/dev/null; then
-            KISMET_OK=true
-        else
-            echo "[*] Kismet apt install failed — trying libprotobuf23 fix..."
-            wget -q "http://ftp.de.debian.org/debian/pool/main/p/protobuf/libprotobuf23_3.12.4-1_${ARCH}.deb" \
-                -O /tmp/libprotobuf23.deb 2>/dev/null
-            dpkg -i /tmp/libprotobuf23.deb 2>/dev/null
-            apt install -y kismet 2>/dev/null && KISMET_OK=true
-        fi
-    else
-        echo "[!] Kismet GPG key failed — skipping Kismet install"
-    fi
-
-    set -e  # re-enable exit on error
-
-    if [ "$KISMET_OK" = true ]; then
-        usermod -aG kismet "$SUDO_USER" 2>/dev/null || true
+            > /etc/apt/sources.list.d/kismet.list &&
+        apt-get update -qq &&
+        apt-get install -y kismet &&
+        usermod -aG kismet "$SUDO_USER" 2>/dev/null || true &&
         echo "[+] Kismet installed"
-    else
-        echo "[!] Kismet install failed — run manually: sudo apt install kismet"
-    fi
+    } 2>/dev/null || echo "[!] Kismet install failed — skipping (run manually: sudo apt install kismet)"
 fi
 echo ""
 
