@@ -23,7 +23,7 @@ echo ""
 
 # ── SYSTEM DEPS ───────────────────────────────────────────
 echo "[+] Installing system packages..."
-apt update -qq
+apt update -qq || true
 apt install -y tshark hostapd dnsmasq rfkill iw bluetooth bluez python3 python3-venv bc dkms build-essential git libelf-dev wget gnupg
 echo "[+] System packages installed"
 echo ""
