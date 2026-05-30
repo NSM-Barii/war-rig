@@ -105,11 +105,13 @@ class Boot():
             subprocess.run(["ip", "addr", "flush", "dev", cls.AP_IFACE],            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["ip", "addr", "add",   cls.AP_IP, "dev", cls.AP_IFACE], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["ip", "link", "set",   cls.AP_IFACE, "up"],             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            time.sleep(1)  # let kernel finish binding IP before dnsmasq starts
 
             # stop dnsmasq, drop in our config, start fresh
             subprocess.run(["systemctl", "stop",  "dnsmasq"],                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["cp", str(DNSMASQ_CONF), "/etc/dnsmasq.d/dooku.conf"],  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["systemctl", "start", "dnsmasq"],                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            time.sleep(1)  # let dnsmasq bind before hostapd starts bringing clients in
 
             # start hostapd (no -B — Popen keeps it running without daemonizing)
             subprocess.Popen(["hostapd", str(HOSTAPD_CONF)],                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

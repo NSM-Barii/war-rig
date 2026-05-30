@@ -144,6 +144,15 @@ systemctl mask    hostapd 2>/dev/null || true
 # dnsmasq managed manually by start.py — disable autostart
 systemctl disable dnsmasq 2>/dev/null || true
 
+# tell NetworkManager to permanently leave wlan0 alone
+mkdir -p /etc/NetworkManager/conf.d
+cat > /etc/NetworkManager/conf.d/dooku-unmanaged.conf <<'EOF'
+[keyfile]
+unmanaged-devices=interface-name:wlan0
+EOF
+systemctl restart NetworkManager 2>/dev/null || true
+echo "[+] wlan0 unmanaged by NetworkManager"
+
 # install dooku service
 sed "s|ExecStart=.*|ExecStart=$SCRIPT_DIR/venv/bin/python $SCRIPT_DIR/start.py|" \
     "$BASE/config/dooku.service" > /etc/systemd/system/dooku.service
