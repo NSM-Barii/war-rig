@@ -29,26 +29,6 @@ echo "[+] System packages installed"
 echo ""
 
 
-# ── KISMET ────────────────────────────────────────────────
-echo "[+] Installing Kismet (optional — skipped on failure)..."
-if command -v kismet &>/dev/null; then
-    echo "[+] Kismet already installed — skipping"
-else
-    {
-        wget -q -O /tmp/kismet-release.gpg.key \
-            https://www.kismetwireless.net/repos/kismet-release.gpg.key &&
-        gpg --dearmor < /tmp/kismet-release.gpg.key \
-            > /usr/share/keyrings/kismet-archive-keyring.gpg &&
-        echo 'deb [signed-by=/usr/share/keyrings/kismet-archive-keyring.gpg] https://www.kismetwireless.net/repos/apt/release/kali-rolling kali-rolling main' \
-            > /etc/apt/sources.list.d/kismet.list &&
-        apt-get update -qq &&
-        apt-get install -y kismet &&
-        usermod -aG kismet "$SUDO_USER" 2>/dev/null || true &&
-        echo "[+] Kismet installed"
-    } 2>/dev/null || echo "[!] Kismet install failed — skipping (run manually: sudo apt install kismet)"
-fi
-echo ""
-
 
 # ── KERNEL HEADERS ────────────────────────────────────────
 echo "[+] Installing kernel headers for $ARCH (kernel $KERNEL)..."
