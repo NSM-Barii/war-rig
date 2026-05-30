@@ -34,7 +34,7 @@ echo ""
 echo "[+] Installing kernel headers for $ARCH (kernel $KERNEL)..."
 apt install --no-install-recommends -y dkms build-essential git bc libelf-dev
 
-apt install -y kalipi-kernel-headers
+apt install -y kalipi-kernel-headers 2>/dev/null || apt install -y linux-headers-${KERNEL} 2>/dev/null || true
 
 if [ ! -d "/lib/modules/$KERNEL/build" ]; then
     echo "[!] Headers not found at /lib/modules/$KERNEL/build — aborting"
