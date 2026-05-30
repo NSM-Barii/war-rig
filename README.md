@@ -1,5 +1,9 @@
 <div align="center">
 
+<img src="assets/dooku.svg" alt="Dooku" width="100%"/>
+
+<br/>
+
 ```
 ██████╗  ██████╗  ██████╗ ██╗  ██╗██╗   ██╗
 ██╔══██╗██╔═══██╗██╔═══██╗██║ ██╔╝██║   ██║
@@ -9,15 +13,28 @@
 ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝
 ```
 
-  <img src="assets/IMG_1346.jpg" alt="Dooku Wardriving Rig" width="400"/>
+<img src="assets/IMG_1346.jpg" alt="Dooku Wardriving Rig" width="420"/>
+
+<br/>
+
+![Kali](https://img.shields.io/badge/OS-Kali%20Linux-557C94?style=flat-square&logo=kalilinux&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.10+-crimson?style=flat-square&logo=python&logoColor=white)
+![Pi](https://img.shields.io/badge/Hardware-Raspberry%20Pi%205-C51A4A?style=flat-square&logo=raspberrypi&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Active%20Development-gold?style=flat-square)
 
 </div>
 
 ---
 
-### *By a Star Wars Nerd*
+<div align="center">
+
+### ⚔️ *By a Star Wars Nerd* ⚔️
 
 > **"I have become more powerful than any Jedi."** — Count Dooku
+
+</div>
+
+---
 
 > ⚠️ Currently in active development and testing. Features are being built and pushed regularly.
 
@@ -27,25 +44,31 @@ Portable wardriving rig built inside a hardened case. Raspberry Pi 5 running Kal
 
 ## What It Does
 
-- **AP on boot** — Pi creates its own WiFi hotspot (SSID: Dooku). Connect your phone, open `10.10.10.1:5000`
-- **Live dashboard** — FLOCK tab shows real-time WiFi and BLE detections. KISMET tab opens Kismet's native wardriving UI
-- **flock-back integration** — full WiFi and BLE wardriving powered by [flock-back](https://github.com/nsm-barii/flock-back)
-- **Kismet integration** — RF wardriving across all monitor-mode adapters, accessible at `10.10.10.1:2501`
-- **Multi-adapter monitor mode** — all non-AP adapters scanning simultaneously across 2.4GHz and 5GHz
-- **Auto-start on boot** — plug in and everything comes up on its own via systemd
-- **SSH MODE** — tap button on dashboard to drop AP and hand wlan0 back to NetworkManager for SSH access
+| | |
+|---|---|
+| 📡 **AP on boot** | Pi creates its own WiFi hotspot (SSID: `Dooku`). Connect your phone, open `10.10.10.1:5000` |
+| 📊 **Live dashboard** | FLOCK tab shows real-time WiFi and BLE detections. KISMET tab opens Kismet's native wardriving UI |
+| 🔍 **flock-back** | Full WiFi and BLE wardriving powered by [flock-back](https://github.com/nsm-barii/flock-back) |
+| 🌐 **Kismet** | RF wardriving across all monitor-mode adapters, accessible at `10.10.10.1:2501` |
+| 📶 **Multi-adapter** | All non-AP adapters scanning simultaneously across 2.4GHz and 5GHz |
+| ⚙️ **Auto-start** | Plug in and everything comes up on its own via systemd |
+| 🔒 **SSH MODE** | Tap button on dashboard to drop AP and hand `wlan0` back for SSH access |
 
 ---
 
 ## Hardware
 
-- Raspberry Pi 5 (8GB)
-- Kali Linux Headless (64-bit)
-- ALFA AWUS1900 (RTL8814AU) — monitor mode
-- ALFA AWUS036ACS (RTL8821AU) — monitor mode
-- Powered USB hub
-- Hardened carry case
-- Portable battery bank
+```
+┌─────────────────────────────────┐
+│  Raspberry Pi 5 (8GB)           │
+│  Kali Linux Headless (64-bit)   │
+│  ALFA AWUS1900  — RTL8814AU     │
+│  ALFA AWUS036ACS — RTL8821AU    │
+│  Powered USB hub                │
+│  Hardened carry case            │
+│  Portable battery bank          │
+└─────────────────────────────────┘
+```
 
 ---
 
@@ -64,10 +87,18 @@ Installs all dependencies, drivers, and registers the `dooku` systemd service. R
 Created by **NSM-Barii** — Star Wars nerd | Cybersecurity enthusiast
 
 **NSM Toolset:**
-- **Vader** — Recon & discovery
-- **Maul** — Infrastructure mapping
-- **Dooku** — Wardriving rig (this)
+| Tool | Purpose |
+|---|---|
+| [Vader](https://github.com/nsm-barii/vader) | Recon & discovery |
+| [Maul](https://github.com/nsm-barii/maul) | Infrastructure mapping |
+| **Dooku** | Wardriving rig *(this)* |
 
 ---
 
-**Disclaimer:** For educational, ethical, and legal purposes only. Use responsibly and in accordance with local laws.
+<div align="center">
+
+*"Your swords, please. We don't want to make a mess of things."*
+
+**Disclaimer:** For educational, ethical, and legal purposes only.
+
+</div>
