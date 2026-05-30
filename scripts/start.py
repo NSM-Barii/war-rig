@@ -92,24 +92,34 @@ class Boot():
         console.print(f"[bold green][+][/bold green]  Bringing up AP on {cls.AP_IFACE}...")
 
         try:
-            subprocess.run(["pkill", "-x", "hostapd"],                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # kill any existing hostapd
+            subprocess.run(["systemctl", "stop",  "hostapd"],                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["pkill",     "-x",    "hostapd"],                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            time.sleep(1)
+
+            # release from NetworkManager if it's running
             subprocess.run(["nmcli", "dev", "set", cls.AP_IFACE, "managed", "no"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-            subprocess.run(["ip", "link", "set",  cls.AP_IFACE, "down"],            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # configure interface
+            subprocess.run(["ip", "link", "set",   cls.AP_IFACE, "down"],           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["ip", "addr", "flush", "dev", cls.AP_IFACE],            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["ip", "addr", "add",   cls.AP_IP, "dev", cls.AP_IFACE], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["ip", "link", "set",   cls.AP_IFACE, "up"],             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+            # stop dnsmasq, drop in our config, start fresh
+            subprocess.run(["systemctl", "stop",  "dnsmasq"],                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             subprocess.run(["cp", str(DNSMASQ_CONF), "/etc/dnsmasq.d/dooku.conf"],  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            subprocess.run(["systemctl", "restart", "dnsmasq"],                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            subprocess.Popen(["hostapd", "-B", str(HOSTAPD_CONF)],                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["systemctl", "start", "dnsmasq"],                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            # start hostapd (no -B — Popen keeps it running without daemonizing)
+            subprocess.Popen(["hostapd", str(HOSTAPD_CONF)],                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
             time.sleep(3)
 
             result = subprocess.run(["pgrep", "-x", "hostapd"], stdout=subprocess.DEVNULL)
 
             if result.returncode != 0:
-                console.print(f"[bold red][!] hostapd failed to start — check {HOSTAPD_CONF}[/bold red]")
+                console.print(f"[bold red][!] hostapd failed — check {HOSTAPD_CONF}[/bold red]")
                 return False
 
             console.print("[bold green][+][/bold green]  AP live — SSID: Dooku @ 10.10.10.1")
@@ -165,6 +175,16 @@ class Boot():
             console.print("[bold red][!] Kismet failed to start[/bold red]"); return None
 
         console.print(f"[bold green][+][/bold green]  Kismet running (PID {process.pid}) @ http://127.0.0.1:2501")
+
+        # wait for kismet REST API to be ready before flock-back starts polling
+        import urllib.request
+        for _ in range(10):
+            try:
+                urllib.request.urlopen("http://127.0.0.1:2501", timeout=2)
+                break
+            except Exception:
+                time.sleep(2)
+
         return process
 
 
