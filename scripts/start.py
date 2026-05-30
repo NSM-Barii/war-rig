@@ -180,7 +180,7 @@ class Boot():
         venv_python = str(FLOCK_DIR / "venv" / "bin" / "python")
 
         process = subprocess.Popen(
-            [venv_python, "main.py", "-w"],
+            [venv_python, "main.py", "-w", "-k"],
             cwd=str(FLOCK_DIR)
         )
 
